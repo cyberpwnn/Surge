@@ -1,7 +1,7 @@
 package surge.sched;
 
 import surge.Surge;
-import surge.util.Profiler;
+import surge.math.Profiler;
 
 public abstract class Task implements ITask, ICancellable
 {
