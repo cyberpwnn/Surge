@@ -3,13 +3,34 @@ package surge;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
+import surge.collection.GList;
+import surge.sched.IMasterTickComponent;
+import surge.sched.TaskManager;
+
 public class Surge
 {
-	protected static PluginLeech leech = null;
+	protected static PluginAmp amp = null;
+	private static GList<IMasterTickComponent> tickComponents = new GList<IMasterTickComponent>();
+	private static TaskManager taskmgr;
 
-	public static PluginLeech beginLeeching(Plugin plugin)
+	private static void startup()
 	{
-		return new PluginLeech(plugin);
+		registerTicked(taskmgr = new TaskManager());
+	}
+
+	public static void registerTicked(IMasterTickComponent tick)
+	{
+		tickComponents.add(tick);
+	}
+
+	public static void unregisterTicked(IMasterTickComponent tick)
+	{
+		tickComponents.remove(tick);
+	}
+
+	public static PluginAmp createAmp(Plugin plugin)
+	{
+		return new PluginAmp(plugin);
 	}
 
 	public static boolean isMainThread()
@@ -17,18 +38,28 @@ public class Surge
 		return Bukkit.isPrimaryThread();
 	}
 
-	protected static void stopLeeching()
+	protected static void stopAmp()
 	{
-		leech = null;
+		amp = null;
 	}
 
-	public static boolean hasLeech()
+	public static boolean hasAmp()
 	{
-		return getLeech() != null && getLeech().isConnected();
+		return getAmp() != null && getAmp().isConnected();
 	}
 
-	public static PluginLeech getLeech()
+	public static PluginAmp getAmp()
 	{
-		return leech;
+		return amp;
+	}
+
+	public static TaskManager getTaskManager()
+	{
+		return taskmgr;
+	}
+
+	static
+	{
+		startup();
 	}
 }
