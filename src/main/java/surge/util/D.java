@@ -56,26 +56,26 @@ public class D
 
 	public static void l(String message)
 	{
-		log(C.AQUA + Surge.getLeech().getPluginInstance().getClass().getSimpleName(), C.WHITE + message);
+		log(C.AQUA + Surge.getAmp().getPluginInstance().getClass().getSimpleName(), C.WHITE + message);
 	}
 
 	public static void s(String message)
 	{
-		log(C.GREEN + Surge.getLeech().getPluginInstance().getClass().getSimpleName(), C.WHITE + message);
+		log(C.GREEN + Surge.getAmp().getPluginInstance().getClass().getSimpleName(), C.WHITE + message);
 	}
 
 	public static void v(String message)
 	{
-		log(C.LIGHT_PURPLE + Surge.getLeech().getPluginInstance().getClass().getSimpleName(), C.WHITE + message);
+		log(C.LIGHT_PURPLE + Surge.getAmp().getPluginInstance().getClass().getSimpleName(), C.WHITE + message);
 	}
 
 	public static void w(String message)
 	{
-		log(C.RED + Surge.getLeech().getPluginInstance().getClass().getSimpleName(), C.YELLOW + message);
+		log(C.RED + Surge.getAmp().getPluginInstance().getClass().getSimpleName(), C.YELLOW + message);
 	}
 
 	public static void f(String message)
 	{
-		log(C.RED + Surge.getLeech().getPluginInstance().getClass().getSimpleName(), C.RED + message);
+		log(C.RED + Surge.getAmp().getPluginInstance().getClass().getSimpleName(), C.RED + message);
 	}
 }

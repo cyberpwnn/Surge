@@ -1,5 +1,6 @@
 package surge.util;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -7,8 +8,6 @@ import org.apache.commons.lang.Validate;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
-
-import com.google.common.collect.Maps;
 
 /**
  * Colors
@@ -272,11 +271,11 @@ public enum C
 	private final char code;
 	private final boolean isFormat;
 	private final String toString;
-	private final static Map<Integer, C> BY_ID = Maps.newHashMap();
-	private final static Map<Character, C> BY_CHAR = Maps.newHashMap();
-	private final static Map<DyeColor, C> dyeChatMap = Maps.newHashMap();
-	private final static Map<C, String> chatHexMap = Maps.newHashMap();
-	private final static Map<DyeColor, String> dyeHexMap = Maps.newHashMap();
+	private final static Map<Integer, C> BY_ID = new HashMap<Integer, C>();
+	private final static Map<Character, C> BY_CHAR = new HashMap<Character, C>();
+	private final static Map<DyeColor, C> dyeChatMap = new HashMap<DyeColor, C>();
+	private final static Map<C, String> chatHexMap = new HashMap<C, String>();
+	private final static Map<DyeColor, String> dyeHexMap = new HashMap<DyeColor, String>();
 
 	static
 	{
