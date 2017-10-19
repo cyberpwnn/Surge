@@ -9,14 +9,14 @@ public class Average
 	public Average(int size)
 	{
 		values = new double[size];
-		ArrayManipulator.fill(values, 0);
+		ArrayUtils.fill(values, 0);
 		average = 0;
 		dirty = false;
 	}
 
 	public void put(double i)
 	{
-		ArrayManipulator.shiftRight(values, i);
+		ArrayUtils.shiftRight(values, i);
 		dirty = true;
 	}
 

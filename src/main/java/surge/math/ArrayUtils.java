@@ -1,17 +1,15 @@
 package surge.math;
 
-public class ArrayManipulator
+public class ArrayUtils
 {
-	public static void shiftRight(double[] values, double rep)
+	public static void shiftRight(double[] values, double push)
 	{
-		double last = rep;
-
 		for(int index = values.length - 2; index >= 0; index--)
 		{
 			values[index + 1] = values[index];
 		}
 
-		values[0] = last;
+		values[0] = push;
 	}
 
 	public static void wrapRight(double[] values)
