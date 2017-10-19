@@ -33,6 +33,26 @@ public class F
 		}
 	}
 
+	public static String time(double ms, int prec)
+	{
+		if(ms < 1000.0)
+		{
+			return F.f(ms, prec) + " ms";
+		}
+
+		if(ms / 1000.0 < 60.0)
+		{
+			return F.f(ms / 1000.0, prec) + " seconds";
+		}
+
+		if(ms / 1000.0 / 60.0 < 60.0)
+		{
+			return F.f(ms / 1000.0 / 60.0, prec) + " minutes";
+		}
+
+		return F.f(ms / 1000.0 / 60.0 / 60.0, prec) + " hours";
+	}
+
 	public static String b(int i)
 	{
 		return b(new BigInteger(String.valueOf(i)));
