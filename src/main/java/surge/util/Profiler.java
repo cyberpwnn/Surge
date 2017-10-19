@@ -23,7 +23,7 @@ public class Profiler
 	{
 		nanos = System.nanoTime() - startNano;
 		millis = System.currentTimeMillis() - startMillis;
-		time = (double) nanos / 100000.0;
+		time = (double) nanos / 1000000.0;
 		time = (double) millis - time > 1.01 ? millis : time;
 	}
 
