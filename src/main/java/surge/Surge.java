@@ -1,5 +1,7 @@
 package surge;
 
+import java.io.File;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -7,6 +9,7 @@ import surge.collection.GList;
 import surge.hotload.HotloadManager;
 import surge.sched.IMasterTickComponent;
 import surge.sched.TaskManager;
+import surge.util.PluginUtil;
 
 public class Surge
 {
@@ -14,6 +17,14 @@ public class Surge
 	private static GList<IMasterTickComponent> tickComponents = new GList<IMasterTickComponent>();
 	private static TaskManager taskmgr;
 	private static HotloadManager hotloadmgr;
+
+	public static File getPluginJarFile()
+	{
+		File parent = getAmp().getPluginInstance().getDataFolder().getParentFile();
+		String plname = PluginUtil.getPluginFileName(getAmp().getPluginInstance().getName());
+
+		return new File(parent, plname);
+	}
 
 	private static void startup()
 	{
