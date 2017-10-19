@@ -1,37 +1,32 @@
 package surge;
 
 import surge.control.AmpedPlugin;
+import surge.util.D;
 import surge.util.Protocol;
 
 public class TestPlugin extends AmpedPlugin
 {
-
 	@Override
 	public void onStart(Protocol serverProtocol)
 	{
-		// TODO Auto-generated method stub
-
+		D.v("Plugin onStart()");
 	}
 
 	@Override
 	public void onStop()
 	{
-		// TODO Auto-generated method stub
-
+		D.v("Plugin onStop()");
 	}
 
 	@Override
 	public void onPreInit()
 	{
-		// TODO Auto-generated method stub
-
+		D.v("Plugin onPreInit()");
 	}
 
 	@Override
 	public void onPostInit()
 	{
-		// TODO Auto-generated method stub
-
+		D.v("Plugin onPostInit()");
 	}
-
 }
