@@ -1,0 +1,3 @@
+name: ${project.name}
+main: surge.TestPlugin
+version: ${project.version}
