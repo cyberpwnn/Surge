@@ -14,6 +14,7 @@ public abstract class Task implements ITask, ICancellable
 	private boolean completed;
 	private Profiler profiler;
 	private Profiler activeProfiler;
+	private int ticks;
 
 	public Task(String name)
 	{
@@ -51,6 +52,7 @@ public abstract class Task implements ITask, ICancellable
 			{
 				activeProfiler.begin();
 				Task.this.run();
+				ticks++;
 				activeProfiler.end();
 				computeTime = activeProfiler.getMilliseconds();
 				totalComputeTime += computeTime;
@@ -59,6 +61,36 @@ public abstract class Task implements ITask, ICancellable
 				activeProfiler.reset();
 				profiler.reset();
 				profiler.begin();
+			}
+		});
+	}
+
+	public Task(String name, int interval, int total)
+	{
+		setup(name, true);
+		profiler.begin();
+
+		id = Surge.getAmp().startRepeatingTask(0, interval, new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				activeProfiler.begin();
+				Task.this.run();
+				ticks++;
+				activeProfiler.end();
+				computeTime = activeProfiler.getMilliseconds();
+				totalComputeTime += computeTime;
+				profiler.end();
+				activeTime += profiler.getMilliseconds();
+				activeProfiler.reset();
+				profiler.reset();
+				profiler.begin();
+
+				if(ticks >= total)
+				{
+					cancel();
+				}
 			}
 		});
 	}
@@ -73,6 +105,7 @@ public abstract class Task implements ITask, ICancellable
 		computeTime = 0;
 		activeTime = 0;
 		totalComputeTime = 0;
+		ticks = 0;
 	}
 
 	@Override
