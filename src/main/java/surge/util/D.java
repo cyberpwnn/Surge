@@ -56,26 +56,56 @@ public class D
 
 	public static void l(String message)
 	{
+		if(!Surge.hasAmp())
+		{
+			log(C.AQUA + "<NO HEAD>", C.WHITE + message);
+			return;
+		}
+
 		log(C.AQUA + Surge.getAmp().getPluginInstance().getClass().getSimpleName(), C.WHITE + message);
 	}
 
 	public static void s(String message)
 	{
+		if(!Surge.hasAmp())
+		{
+			log(C.GREEN + "<NO HEAD>", C.WHITE + message);
+			return;
+		}
+
 		log(C.GREEN + Surge.getAmp().getPluginInstance().getClass().getSimpleName(), C.WHITE + message);
 	}
 
 	public static void v(String message)
 	{
+		if(!Surge.hasAmp())
+		{
+			log(C.LIGHT_PURPLE + "<NO HEAD>", C.WHITE + message);
+			return;
+		}
+
 		log(C.LIGHT_PURPLE + Surge.getAmp().getPluginInstance().getClass().getSimpleName(), C.WHITE + message);
 	}
 
 	public static void w(String message)
 	{
+		if(!Surge.hasAmp())
+		{
+			log(C.RED + "<NO HEAD>", C.YELLOW + message);
+			return;
+		}
+
 		log(C.RED + Surge.getAmp().getPluginInstance().getClass().getSimpleName(), C.YELLOW + message);
 	}
 
 	public static void f(String message)
 	{
+		if(!Surge.hasAmp())
+		{
+			log(C.RED + "<NO HEAD>", C.RED + message);
+			return;
+		}
+
 		log(C.RED + Surge.getAmp().getPluginInstance().getClass().getSimpleName(), C.RED + message);
 	}
 }
