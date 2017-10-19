@@ -1,4 +1,4 @@
-package surge.util;
+package surge.math;
 
 import org.bukkit.Chunk;
 import org.bukkit.Location;

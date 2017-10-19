@@ -1,4 +1,6 @@
-package surge.util;
+package surge.math;
+
+import surge.util.F;
 
 public class Profiler
 {
