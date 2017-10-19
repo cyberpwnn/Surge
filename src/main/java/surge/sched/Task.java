@@ -1,44 +1,130 @@
 package surge.sched;
 
 import surge.Surge;
+import surge.util.Profiler;
 
 public abstract class Task implements ITask, ICancellable
 {
 	private int id;
+	private String name;
+	private boolean repeating;
+	private double computeTime;
+	private double totalComputeTime;
+	private double activeTime;
+	private boolean completed;
+	private Profiler profiler;
+	private Profiler activeProfiler;
 
-	public Task()
+	public Task(String name)
 	{
-		id = Surge.getLeech().startTask(0, new Runnable()
+		setup(name, false);
+		profiler.begin();
+
+		id = Surge.getAmp().startTask(0, new Runnable()
 		{
 			@Override
 			public void run()
 			{
+				activeProfiler.begin();
 				Task.this.run();
+				activeProfiler.end();
+				completed = true;
+				profiler.end();
+				activeTime = profiler.getMilliseconds();
+				computeTime = activeProfiler.getMilliseconds();
+				totalComputeTime = activeTime;
+				profiler.reset();
+				activeProfiler.reset();
 			}
 		});
 	}
 
-	public Task(int interval)
+	public Task(String name, int interval)
 	{
-		id = Surge.getLeech().startRepeatingTask(0, interval, new Runnable()
+		setup(name, true);
+		profiler.begin();
+
+		id = Surge.getAmp().startRepeatingTask(0, interval, new Runnable()
 		{
 			@Override
 			public void run()
 			{
+				activeProfiler.begin();
 				Task.this.run();
+				activeProfiler.end();
+				computeTime = activeProfiler.getMilliseconds();
+				totalComputeTime += computeTime;
+				profiler.end();
+				activeTime += profiler.getMilliseconds();
+				activeProfiler.reset();
+				profiler.reset();
+				profiler.begin();
 			}
 		});
+	}
+
+	private void setup(String n, boolean r)
+	{
+		profiler = new Profiler();
+		activeProfiler = new Profiler();
+		repeating = r;
+		name = n;
+		completed = false;
+		computeTime = 0;
+		activeTime = 0;
+		totalComputeTime = 0;
 	}
 
 	@Override
 	public void cancel()
 	{
-		Surge.getLeech().stopTask(id);
+		Surge.getAmp().stopTask(id);
+		completed = true;
+		profiler.end();
+		activeTime += profiler.getMilliseconds();
+		profiler.reset();
+		activeProfiler.reset();
 	}
 
 	@Override
 	public int getId()
 	{
 		return id;
+	}
+
+	@Override
+	public boolean isRepeating()
+	{
+		return repeating;
+	}
+
+	@Override
+	public String getName()
+	{
+		return name;
+	}
+
+	@Override
+	public double getComputeTime()
+	{
+		return computeTime;
+	}
+
+	@Override
+	public boolean hasCompleted()
+	{
+		return completed;
+	}
+
+	@Override
+	public double getTotalComputeTime()
+	{
+		return totalComputeTime;
+	}
+
+	@Override
+	public double getActiveTime()
+	{
+		return activeTime;
 	}
 }
