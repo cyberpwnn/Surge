@@ -1,7 +1,5 @@
 package surge;
 
-import java.io.File;
-
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -35,7 +33,7 @@ public class PluginAmp
 	{
 		connected = true;
 		Surge.amp = this;
-		Surge.getHotloadManager().track(new File(getPluginInstance().getDataFolder().getParentFile(), PluginUtil.getPluginFileName(getPluginInstance().getName())), new Runnable()
+		Surge.getHotloadManager().track(Surge.getPluginJarFile(), new Runnable()
 		{
 			@Override
 			public void run()
