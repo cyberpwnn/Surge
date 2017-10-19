@@ -5,12 +5,13 @@ import org.bukkit.plugin.Plugin;
 
 import surge.util.D;
 
-public class PluginLeech
+public class PluginAmp
 {
 	private Plugin plugin;
 	private boolean connected;
+	private int masterTask;
 
-	public PluginLeech(Plugin plugin)
+	public PluginAmp(Plugin plugin)
 	{
 		this.plugin = plugin;
 		connected = false;
@@ -29,13 +30,31 @@ public class PluginLeech
 	public void connect()
 	{
 		connected = true;
-		Surge.leech = this;
+		Surge.amp = this;
+
+		masterTask = startRepeatingTask(0, 0, new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				masterTick();
+			}
+		});
+	}
+
+	private void masterTick()
+	{
+		if(!isConnected())
+		{
+			stopTask(masterTask);
+		}
 	}
 
 	public void disconnect()
 	{
 		connected = false;
-		Surge.stopLeeching();
+		stopTask(masterTask);
+		Surge.stopAmp();
 	}
 
 	public int startTask(int delay, Runnable r)
@@ -47,7 +66,7 @@ public class PluginLeech
 
 		else
 		{
-			D.f("No leech to start task");
+			D.f("No amp to start task");
 		}
 
 		return -1;
@@ -62,7 +81,7 @@ public class PluginLeech
 
 		else
 		{
-			D.f("No leech to start repeating task");
+			D.f("No amp to start repeating task");
 		}
 
 		return -1;
