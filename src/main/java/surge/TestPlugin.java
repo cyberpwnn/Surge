@@ -1,18 +1,37 @@
 package surge;
 
-import org.bukkit.plugin.java.JavaPlugin;
+import surge.control.AmpedPlugin;
+import surge.util.Protocol;
 
-public class TestPlugin extends JavaPlugin
+public class TestPlugin extends AmpedPlugin
 {
+
 	@Override
-	public void onEnable()
+	public void onStart(Protocol serverProtocol)
 	{
-		Surge.createAmp(this).connect();
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
-	public void onDisable()
+	public void onStop()
 	{
-		Surge.getAmp().disconnect();
+		// TODO Auto-generated method stub
+
 	}
+
+	@Override
+	public void onPreInit()
+	{
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onPostInit()
+	{
+		// TODO Auto-generated method stub
+
+	}
+
 }
