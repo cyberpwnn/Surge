@@ -1,9 +1,13 @@
 package surge;
 
+import java.io.File;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
+import surge.sched.IMasterTickComponent;
 import surge.util.D;
+import surge.util.PluginUtil;
 
 public class PluginAmp
 {
@@ -31,6 +35,15 @@ public class PluginAmp
 	{
 		connected = true;
 		Surge.amp = this;
+		Surge.getHotloadManager().track(new File(getPluginInstance().getDataFolder().getParentFile(), PluginUtil.getPluginFileName(getPluginInstance().getName())), new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				D.v("Reinjecting... ");
+				PluginUtil.reload(getPluginInstance());
+			}
+		});
 
 		masterTask = startRepeatingTask(0, 0, new Runnable()
 		{
@@ -48,6 +61,11 @@ public class PluginAmp
 		{
 			stopTask(masterTask);
 		}
+
+		for(IMasterTickComponent i : Surge.getTickComponents())
+		{
+			i.onTick();
+		}
 	}
 
 	public void disconnect()
@@ -55,6 +73,7 @@ public class PluginAmp
 		connected = false;
 		stopTask(masterTask);
 		Surge.stopAmp();
+		Surge.getHotloadManager().untrackall();
 	}
 
 	public int startTask(int delay, Runnable r)
