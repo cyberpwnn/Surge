@@ -9,20 +9,29 @@ public class Profiler
 	private long millis;
 	private long startMillis;
 	private double time;
+	private boolean profiling;
 
 	public Profiler()
 	{
 		reset();
+		profiling = false;
 	}
 
 	public void begin()
 	{
+		profiling = true;
 		startNano = System.nanoTime();
 		startMillis = System.currentTimeMillis();
 	}
 
 	public void end()
 	{
+		if(!profiling)
+		{
+			return;
+		}
+
+		profiling = false;
 		nanos = System.nanoTime() - startNano;
 		millis = System.currentTimeMillis() - startMillis;
 		time = (double) nanos / 1000000.0;
@@ -36,6 +45,7 @@ public class Profiler
 		startNano = -1;
 		startMillis = -1;
 		time = -0;
+		profiling = false;
 	}
 
 	public String getTime(int dec)
@@ -91,5 +101,35 @@ public class Profiler
 	public long getNanoseconds()
 	{
 		return (long) (time * 1000000.0);
+	}
+
+	public long getNanos()
+	{
+		return nanos;
+	}
+
+	public long getStartNano()
+	{
+		return startNano;
+	}
+
+	public long getMillis()
+	{
+		return millis;
+	}
+
+	public long getStartMillis()
+	{
+		return startMillis;
+	}
+
+	public double getTime()
+	{
+		return time;
+	}
+
+	public boolean isProfiling()
+	{
+		return profiling;
 	}
 }
