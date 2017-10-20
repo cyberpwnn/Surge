@@ -14,6 +14,11 @@ public class M
 		return maxSafeRadius(l, 256, 112);
 	}
 
+	public static double clip(double value, double min, double max)
+	{
+		return Math.min(max, Math.max(min, value));
+	}
+
 	public static double maxSafeRadius(Location l, double max, double interval)
 	{
 		double s = 1;
