@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 
 import surge.control.AmpedPlugin;
 import surge.sched.IMasterTickComponent;
+import surge.sched.TICK;
 import surge.util.D;
 import surge.util.PluginUtil;
 
@@ -59,6 +60,8 @@ public class PluginAmp
 		{
 			stopTask(masterTask);
 		}
+
+		TICK.tick++;
 
 		for(IMasterTickComponent i : Surge.getTickComponents())
 		{
