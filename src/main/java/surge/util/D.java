@@ -9,6 +9,14 @@ public class D
 {
 	private static GList<String> buffer = new GList<String>();
 
+	public static void flush()
+	{
+		while(!buffer.isEmpty())
+		{
+			Bukkit.getServer().getConsoleSender().sendMessage(buffer.pop());
+		}
+	}
+
 	private static void log(String tag, String message)
 	{
 		String m = tag + ": " + message;
@@ -16,11 +24,6 @@ public class D
 		if(Surge.isMainThread())
 		{
 			Bukkit.getServer().getConsoleSender().sendMessage(m);
-
-			while(!buffer.isEmpty())
-			{
-				Bukkit.getServer().getConsoleSender().sendMessage(buffer.pop());
-			}
 		}
 
 		else

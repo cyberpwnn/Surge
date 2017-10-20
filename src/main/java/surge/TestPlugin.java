@@ -36,6 +36,6 @@ public class TestPlugin extends AmpedPlugin
 	public void onControllerRegistry()
 	{
 		D.v("Plugin onControllerRegistry()");
-		registerController(testController = new TestController());
+		registerController(new TestController());
 	}
 }

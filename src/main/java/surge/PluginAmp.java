@@ -62,6 +62,7 @@ public class PluginAmp
 		}
 
 		TICK.tick++;
+		D.flush();
 
 		for(IMasterTickComponent i : Surge.getTickComponents().copy())
 		{
