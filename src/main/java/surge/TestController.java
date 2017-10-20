@@ -1,6 +1,7 @@
 package surge;
 
 import surge.control.Controller;
+import surge.pool.A;
 import surge.util.D;
 
 public class TestController extends Controller
@@ -22,5 +23,14 @@ public class TestController extends Controller
 	{
 		D.v(this, "Controller tick() ");
 		D.l(this, "There are " + Surge.getAmp().getPluginInstance().getControllers().size());
+
+		new A()
+		{
+			@Override
+			public void run()
+			{
+				D.v("Im async!");
+			}
+		};
 	}
 }
