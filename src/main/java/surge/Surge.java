@@ -3,9 +3,9 @@ package surge;
 import java.io.File;
 
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 
 import surge.collection.GList;
+import surge.control.AmpedPlugin;
 import surge.hotload.HotloadManager;
 import surge.sched.IMasterTickComponent;
 import surge.sched.TaskManager;
@@ -47,7 +47,7 @@ public class Surge
 		tickComponents.remove(tick);
 	}
 
-	public static PluginAmp createAmp(Plugin plugin)
+	public static PluginAmp createAmp(AmpedPlugin plugin)
 	{
 		return new PluginAmp(plugin);
 	}

@@ -1,25 +1,25 @@
 package surge;
 
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.Plugin;
 
+import surge.control.AmpedPlugin;
 import surge.sched.IMasterTickComponent;
 import surge.util.D;
 import surge.util.PluginUtil;
 
 public class PluginAmp
 {
-	private Plugin plugin;
+	private AmpedPlugin plugin;
 	private boolean connected;
 	private int masterTask;
 
-	public PluginAmp(Plugin plugin)
+	public PluginAmp(AmpedPlugin plugin)
 	{
 		this.plugin = plugin;
 		connected = false;
 	}
 
-	public Plugin getPluginInstance()
+	public AmpedPlugin getPluginInstance()
 	{
 		return plugin;
 	}
