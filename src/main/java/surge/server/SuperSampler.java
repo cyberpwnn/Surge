@@ -4,37 +4,45 @@ import java.util.UUID;
 
 import surge.Surge;
 import surge.math.Average;
-import surge.math.M;
 import surge.sched.IMasterTickComponent;
+import surge.sched.TICK;
 
 public class SuperSampler implements IMasterTickComponent
 {
 	private Average ticksPerSecondL;
-	private Average ticksPerSecondM;
-	private Average ticksPerSecondS;
 	private Average tickTimeL;
-	private Average tickTimeM;
-	private Average tickTimeS;
 	private double ticksPerSecond;
 	private double ticksPerSecondRaw;
 	private double tickTime;
 	private double tickTimeRaw;
 	private boolean running;
+	private double tickUtilizationRaw;
+	private double tickUtilization;
+	private double leftoverTickTime;
+	private double gcPerSecond;
+	private long memoryUse;
+	private long memoryAllocated;
+	private long memoryCollected;
+	private long tgc;
 	private TPSMonitor tpsMonitor;
+	private MemoryMonitor memoryMonitor;
 
 	public SuperSampler()
 	{
 		running = false;
-		ticksPerSecondL = new Average(20);
-		ticksPerSecondM = new Average(10);
-		ticksPerSecondS = new Average(3);
-		tickTimeL = new Average(20);
-		tickTimeM = new Average(10);
-		tickTimeS = new Average(3);
+		ticksPerSecondL = new Average(6);
+		tickTimeL = new Average(6);
 		ticksPerSecondRaw = 0;
 		ticksPerSecond = 0;
 		tickTimeRaw = 0;
 		tickTime = 0;
+		tickUtilization = 0;
+		tickUtilizationRaw = 0;
+		gcPerSecond = 0;
+		memoryUse = 0;
+		tgc = 0;
+		memoryAllocated = 0;
+		memoryCollected = 0;
 
 		tpsMonitor = new TPSMonitor()
 		{
@@ -44,30 +52,38 @@ public class SuperSampler implements IMasterTickComponent
 				ticksPerSecondRaw = getRawTicksPerSecond();
 				tickTimeRaw = getActualTickTimeMS();
 				ticksPerSecondL.put(ticksPerSecondRaw);
-				ticksPerSecondM.put(ticksPerSecondRaw);
-				ticksPerSecondS.put(ticksPerSecondRaw);
-				ticksPerSecond = 0;
-				ticksPerSecond += ticksPerSecondL.getAverage();
-				ticksPerSecond += ticksPerSecondM.getAverage();
-				ticksPerSecond /= 2;
-				ticksPerSecond += ticksPerSecondS.getAverage();
-				ticksPerSecond /= 2;
 				tickTimeL.put(tickTimeRaw);
-				tickTimeM.put(tickTimeRaw);
-				tickTimeS.put(tickTimeRaw);
-				tickTime = 0;
-				tickTime += tickTimeL.getAverage();
-				tickTime += tickTimeM.getAverage();
-				tickTime /= 2;
-				tickTime += tickTimeS.getAverage();
-				tickTime /= 2;
-				double maxms = getTickTimeMS();
-				tickTime = M.clip(tickTime, 0, maxms);
+				ticksPerSecond = ticksPerSecondL.getAverage();
+				tickTime = tickTimeL.getAverage();
+				tickUtilizationRaw = tickTimeRaw / 50.0;
+				tickUtilization = tickTime / 50.0;
+				ticksPerSecond = ticksPerSecond > 19.84 ? 20 : ticksPerSecond;
+				leftoverTickTime = 50 - tickUtilization < 0 ? 0 : 50 - tickUtilization;
+			}
+		};
 
-				if(ticksPerSecond > 19.92)
+		memoryMonitor = new MemoryMonitor()
+		{
+			@Override
+			public void onGc()
+			{
+
+			}
+
+			@Override
+			public void onAllocationSet()
+			{
+				tgc += getMemoryCollectionsPerTick();
+
+				if(TICK.tick % 20 == 0)
 				{
-					ticksPerSecond = 20;
+					gcPerSecond = tgc;
+					tgc = 0;
 				}
+
+				memoryUse = getMemoryUsedAfterGC();
+				memoryAllocated = getMemoryAllocatedPerTick();
+				memoryCollected = getMemoryCollectedPerTick();
 			}
 		};
 	}
@@ -75,6 +91,7 @@ public class SuperSampler implements IMasterTickComponent
 	public void start()
 	{
 		tpsMonitor.start();
+		memoryMonitor.start();
 		running = true;
 		Surge.registerTicked(this);
 	}
@@ -82,6 +99,7 @@ public class SuperSampler implements IMasterTickComponent
 	public void stop()
 	{
 		tpsMonitor.interrupt();
+		memoryMonitor.interrupt();
 		running = false;
 		Surge.unregisterTicked(this);
 	}
@@ -104,16 +122,6 @@ public class SuperSampler implements IMasterTickComponent
 	public Average getTicksPerSecondL()
 	{
 		return ticksPerSecondL;
-	}
-
-	public Average getTicksPerSecondM()
-	{
-		return ticksPerSecondM;
-	}
-
-	public Average getTicksPerSecondS()
-	{
-		return ticksPerSecondS;
 	}
 
 	public double getTicksPerSecond()
@@ -141,16 +149,6 @@ public class SuperSampler implements IMasterTickComponent
 		return tickTimeL;
 	}
 
-	public Average getTickTimeM()
-	{
-		return tickTimeM;
-	}
-
-	public Average getTickTimeS()
-	{
-		return tickTimeS;
-	}
-
 	public double getTickTime()
 	{
 		return tickTime;
@@ -159,5 +157,50 @@ public class SuperSampler implements IMasterTickComponent
 	public double getTickTimeRaw()
 	{
 		return tickTimeRaw;
+	}
+
+	public double getTickUtilizationRaw()
+	{
+		return tickUtilizationRaw;
+	}
+
+	public double getTickUtilization()
+	{
+		return tickUtilization;
+	}
+
+	public double getLeftoverTickTime()
+	{
+		return leftoverTickTime;
+	}
+
+	public double getGcPerSecond()
+	{
+		return gcPerSecond;
+	}
+
+	public long getTgc()
+	{
+		return tgc;
+	}
+
+	public MemoryMonitor getMemoryMonitor()
+	{
+		return memoryMonitor;
+	}
+
+	public long getMemoryUse()
+	{
+		return memoryUse;
+	}
+
+	public long getMemoryAllocated()
+	{
+		return memoryAllocated;
+	}
+
+	public long getMemoryCollected()
+	{
+		return memoryCollected;
 	}
 }
