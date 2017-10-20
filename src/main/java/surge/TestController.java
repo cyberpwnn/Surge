@@ -27,6 +27,8 @@ public class TestController extends Controller
 	@Override
 	public void tick()
 	{
-		D.s(this, "TPS: " + F.f(ss.getTicksPerSecond(), 2) + " (" + F.time(ss.getTickTime(), 2) + ")");
+		D.s(this, "    ");
+		D.s(this, "TPS: " + F.f(ss.getTicksPerSecond(), 1));
+		D.s(this, "TICK: " + F.time(ss.getTickTime(), 0) + " (" + F.pc(ss.getTickUtilization(), 0) + ")");
 	}
 }
