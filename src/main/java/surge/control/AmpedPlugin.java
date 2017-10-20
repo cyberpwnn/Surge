@@ -4,16 +4,20 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import surge.Surge;
 import surge.collection.GList;
+import surge.pool.ParallelPoolManager;
+import surge.pool.QueueMode;
 import surge.sched.IMasterTickComponent;
 import surge.util.Protocol;
 
 public abstract class AmpedPlugin extends JavaPlugin implements SurgePlugin, IMasterTickComponent
 {
 	private GList<IController> controllers;
+	private ParallelPoolManager pp;
 
 	public AmpedPlugin()
 	{
 		controllers = new GList<IController>();
+		pp = new ParallelPoolManager("amp-worker", 4, QueueMode.ROUND_ROBIN);
 		onControllerRegistry();
 		onPreInit();
 	}
@@ -48,6 +52,7 @@ public abstract class AmpedPlugin extends JavaPlugin implements SurgePlugin, IMa
 
 		onStop();
 
+		pp.shutdown();
 		Surge.getAmp().disconnect();
 	}
 
@@ -81,6 +86,12 @@ public abstract class AmpedPlugin extends JavaPlugin implements SurgePlugin, IMa
 	public String getTickName()
 	{
 		return getName() + "-tick";
+	}
+
+	@Override
+	public ParallelPoolManager getThreadPool()
+	{
+		return pp;
 	}
 
 	@Override

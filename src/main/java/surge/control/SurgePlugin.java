@@ -1,6 +1,7 @@
 package surge.control;
 
 import surge.collection.GList;
+import surge.pool.ParallelPoolManager;
 import surge.util.Protocol;
 
 public interface SurgePlugin
@@ -50,4 +51,11 @@ public interface SurgePlugin
 	 * @return a list of controllable objects
 	 */
 	public GList<IController> getControllers();
+
+	/**
+	 * Get the threadPool
+	 *
+	 * @return the pool manager
+	 */
+	public ParallelPoolManager getThreadPool();
 }
