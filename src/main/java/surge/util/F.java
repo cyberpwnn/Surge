@@ -51,7 +51,7 @@ public class F
 			return F.f(ms / 1000.0 / 60.0, prec) + " minutes";
 		}
 
-		return F.f(ms / 1000.0 / 60.0 / 60.0, prec) + " hours";
+		return F.f(ms, prec) + " ms";
 	}
 
 	public static String b(int i)
