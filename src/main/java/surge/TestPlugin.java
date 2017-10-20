@@ -6,10 +6,12 @@ import surge.util.Protocol;
 
 public class TestPlugin extends AmpedPlugin
 {
+	public TestController testController;
+
 	@Override
 	public void onStart(Protocol serverProtocol)
 	{
-
+		D.v("Plugin onStart(" + serverProtocol.toString() + ")");
 	}
 
 	@Override
@@ -28,5 +30,12 @@ public class TestPlugin extends AmpedPlugin
 	public void onPostInit()
 	{
 		D.v("Plugin onPostInit()");
+	}
+
+	@Override
+	public void onControllerRegistry()
+	{
+		D.v("Plugin onControllerRegistry()");
+		registerController(testController = new TestController());
 	}
 }
