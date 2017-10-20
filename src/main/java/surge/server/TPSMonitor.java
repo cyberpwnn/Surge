@@ -17,6 +17,7 @@ public abstract class TPSMonitor extends Thread
 
 	public TPSMonitor()
 	{
+		setName("Surge Tick Monitor");
 		tickProfiler = new Profiler();
 		tickProfiler.begin();
 		tickTimeProfiler = new Profiler();
@@ -53,17 +54,9 @@ public abstract class TPSMonitor extends Thread
 				tickProfiler.begin();
 				ticked = false;
 				onTicked();
+				actualTickTimeMS = 0;
 			}
 
-			try
-			{
-				Thread.sleep(1);
-			}
-
-			catch(InterruptedException e)
-			{
-				break;
-			}
 		}
 	}
 
@@ -74,10 +67,21 @@ public abstract class TPSMonitor extends Thread
 			return;
 		}
 
+		if(state.equals(State.BLOCKED))
+		{
+			return;
+		}
+
+		if(!state.equals(State.TIMED_WAITING) && !state.equals(State.RUNNABLE))
+		{
+			System.out.println(state);
+			return;
+		}
+
 		if(lastState.equals(State.RUNNABLE) && state.equals(State.TIMED_WAITING))
 		{
 			tickTimeProfiler.end();
-			actualTickTimeMS = tickTimeProfiler.getMilliseconds();
+			actualTickTimeMS += tickTimeProfiler.getMilliseconds();
 			tickTimeProfiler.reset();
 		}
 
