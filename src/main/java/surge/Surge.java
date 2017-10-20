@@ -17,12 +17,12 @@ public class Surge
 	private static GList<IMasterTickComponent> tickComponents = new GList<IMasterTickComponent>();
 	private static TaskManager taskmgr;
 	private static HotloadManager hotloadmgr;
+	private static Thread mainThread;
 
 	public static File getPluginJarFile()
 	{
 		File parent = getAmp().getPluginInstance().getDataFolder().getParentFile();
 		String plname = PluginUtil.getPluginFileName(getAmp().getPluginInstance().getName());
-
 		return new File(parent, plname);
 	}
 
@@ -30,6 +30,11 @@ public class Surge
 	{
 		registerTicked(taskmgr = new TaskManager());
 		registerTicked(hotloadmgr = new HotloadManager());
+	}
+
+	public static Thread getServerThread()
+	{
+		return mainThread;
 	}
 
 	public static GList<IMasterTickComponent> getTickComponents()
@@ -49,6 +54,11 @@ public class Surge
 
 	public static PluginAmp createAmp(AmpedPlugin plugin)
 	{
+		if(isMainThread())
+		{
+			mainThread = Thread.currentThread();
+		}
+
 		return new PluginAmp(plugin);
 	}
 
