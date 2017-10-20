@@ -1,5 +1,6 @@
 package surge.control;
 
+import surge.collection.GList;
 import surge.util.Protocol;
 
 public interface SurgePlugin
@@ -29,4 +30,24 @@ public interface SurgePlugin
 	 * apis which require services will not be online here yet. Be safe.
 	 */
 	public void onPreInit();
+
+	/**
+	 * Called when it is time to register controllers
+	 */
+	public void onControllerRegistry();
+
+	/**
+	 * Register a controller
+	 *
+	 * @param c
+	 *            the controller
+	 */
+	public void registerController(IController c);
+
+	/**
+	 * Get all active controllers
+	 *
+	 * @return a list of controllable objects
+	 */
+	public GList<IController> getControllers();
 }
