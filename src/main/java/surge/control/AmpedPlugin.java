@@ -26,6 +26,7 @@ public abstract class AmpedPlugin extends JavaPlugin implements SurgePlugin, IMa
 	public void onLoad()
 	{
 		onPostInit();
+		pp.start();
 	}
 
 	@Override
