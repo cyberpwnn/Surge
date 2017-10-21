@@ -8,9 +8,9 @@ public interface IBursterator<T>
 {
 	public void burst(T t);
 
-	public void setTimeLock(int ms);
+	public void setTimeLock(double ms);
 
-	public int getEstimatedTimeUse();
+	public double getEstimatedTimeUse();
 
 	public int flush();
 
