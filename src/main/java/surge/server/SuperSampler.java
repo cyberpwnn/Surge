@@ -5,12 +5,12 @@ import java.util.UUID;
 import surge.Surge;
 import surge.math.Average;
 import surge.sched.IMasterTickComponent;
-import surge.sched.TICK;
 
 public class SuperSampler implements IMasterTickComponent
 {
 	private Average ticksPerSecondL;
 	private Average tickTimeL;
+	private Average mahL;
 	private double ticksPerSecond;
 	private double ticksPerSecondRaw;
 	private double tickTime;
@@ -19,11 +19,10 @@ public class SuperSampler implements IMasterTickComponent
 	private double tickUtilizationRaw;
 	private double tickUtilization;
 	private double leftoverTickTime;
-	private double gcPerSecond;
 	private long memoryUse;
 	private long memoryAllocated;
 	private long memoryCollected;
-	private long tgc;
+	private long mahs;
 	private TPSMonitor tpsMonitor;
 	private MemoryMonitor memoryMonitor;
 
@@ -31,6 +30,7 @@ public class SuperSampler implements IMasterTickComponent
 	{
 		running = false;
 		ticksPerSecondL = new Average(6);
+		mahL = new Average(20);
 		tickTimeL = new Average(6);
 		ticksPerSecondRaw = 0;
 		ticksPerSecond = 0;
@@ -38,11 +38,10 @@ public class SuperSampler implements IMasterTickComponent
 		tickTime = 0;
 		tickUtilization = 0;
 		tickUtilizationRaw = 0;
-		gcPerSecond = 0;
 		memoryUse = 0;
-		tgc = 0;
 		memoryAllocated = 0;
 		memoryCollected = 0;
+		mahs = 0;
 
 		tpsMonitor = new TPSMonitor()
 		{
@@ -57,7 +56,7 @@ public class SuperSampler implements IMasterTickComponent
 				tickTime = tickTimeL.getAverage();
 				tickUtilizationRaw = tickTimeRaw / 50.0;
 				tickUtilization = tickTime / 50.0;
-				ticksPerSecond = ticksPerSecond > 19.84 ? 20 : ticksPerSecond;
+				ticksPerSecond = ticksPerSecond > 20 ? 20 : ticksPerSecond;
 				leftoverTickTime = 50 - tickUtilization < 0 ? 0 : 50 - tickUtilization;
 			}
 		};
@@ -65,25 +64,13 @@ public class SuperSampler implements IMasterTickComponent
 		memoryMonitor = new MemoryMonitor()
 		{
 			@Override
-			public void onGc()
-			{
-
-			}
-
-			@Override
 			public void onAllocationSet()
 			{
-				tgc += getMemoryCollectionsPerTick();
-
-				if(TICK.tick % 20 == 0)
-				{
-					gcPerSecond = tgc;
-					tgc = 0;
-				}
-
 				memoryUse = getMemoryUsedAfterGC();
 				memoryAllocated = getMemoryAllocatedPerTick();
 				memoryCollected = getMemoryCollectedPerTick();
+				mahL.put(getMahs());
+				mahs = (long) mahL.getAverage();
 			}
 		};
 	}
@@ -174,16 +161,6 @@ public class SuperSampler implements IMasterTickComponent
 		return leftoverTickTime;
 	}
 
-	public double getGcPerSecond()
-	{
-		return gcPerSecond;
-	}
-
-	public long getTgc()
-	{
-		return tgc;
-	}
-
 	public MemoryMonitor getMemoryMonitor()
 	{
 		return memoryMonitor;
@@ -202,5 +179,15 @@ public class SuperSampler implements IMasterTickComponent
 	public long getMemoryCollected()
 	{
 		return memoryCollected;
+	}
+
+	public Average getMahL()
+	{
+		return mahL;
+	}
+
+	public long getMahs()
+	{
+		return mahs;
 	}
 }
