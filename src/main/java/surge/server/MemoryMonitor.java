@@ -12,12 +12,12 @@ public abstract class MemoryMonitor extends Thread
 	private long allocated;
 	private long collected;
 	private long collections;
-	private long gcs;
 	private long sms;
 	private long memoryAllocatedPerTick;
 	private long memoryCollectedPerTick;
-	private long memoryCollectionsPerTick;
 	private long memoryFullyAllocatedPerTick;
+	private long mah;
+	private long mahs;
 
 	public MemoryMonitor()
 	{
@@ -28,17 +28,15 @@ public abstract class MemoryMonitor extends Thread
 		lastMemoryUsed = memoryUsed;
 		allocated = 0;
 		collected = 0;
+		mah = 0;
+		mahs = 0;
 		collections = 0;
 		memoryUsedAfterGC = 0;
 		sms = M.ms();
-		gcs = 0;
 		memoryAllocatedPerTick = 0;
 		memoryCollectedPerTick = 0;
-		memoryCollectionsPerTick = 0;
 		memoryFullyAllocatedPerTick = 0;
 	}
-
-	public abstract void onGc();
 
 	public abstract void onAllocationSet();
 
@@ -51,40 +49,35 @@ public abstract class MemoryMonitor extends Thread
 			memoryMax = Runtime.getRuntime().maxMemory();
 			memoryUsed = memoryMax - memoryFree;
 
+			if(memoryUsedAfterGC == 0)
+			{
+				memoryUsedAfterGC = memoryUsed;
+			}
+
 			if(memoryUsed >= lastMemoryUsed)
 			{
 				allocated += memoryUsed - lastMemoryUsed;
+				mah += memoryUsed - lastMemoryUsed;
 			}
 
 			else
 			{
 				collected = lastMemoryUsed - memoryUsed;
 				memoryUsedAfterGC = memoryUsed;
-				gcs++;
-				onGc();
+				allocated = 0;
 			}
+
+			lastMemoryUsed = memoryUsed;
 
 			if(M.ms() - sms >= 50)
 			{
 				sms = M.ms();
 				memoryAllocatedPerTick = allocated;
 				memoryCollectedPerTick = collected;
-				memoryCollectionsPerTick = gcs;
 				memoryFullyAllocatedPerTick = Math.max(0, memoryAllocatedPerTick - memoryCollectedPerTick);
-				collected = 0;
-				allocated = 0;
-				gcs = 0;
+				mahs = mah * 20;
+				mah = 0;
 				onAllocationSet();
-			}
-
-			try
-			{
-				Thread.sleep(1);
-			}
-
-			catch(InterruptedException e)
-			{
-
 			}
 		}
 	}
@@ -129,11 +122,6 @@ public abstract class MemoryMonitor extends Thread
 		return collections;
 	}
 
-	public long getGcs()
-	{
-		return gcs;
-	}
-
 	public long getSms()
 	{
 		return sms;
@@ -154,8 +142,13 @@ public abstract class MemoryMonitor extends Thread
 		return memoryFullyAllocatedPerTick;
 	}
 
-	public long getMemoryCollectionsPerTick()
+	public long getMah()
 	{
-		return memoryCollectionsPerTick;
+		return mah;
+	}
+
+	public long getMahs()
+	{
+		return mahs;
 	}
 }
