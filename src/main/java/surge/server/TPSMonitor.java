@@ -14,6 +14,7 @@ public abstract class TPSMonitor extends Thread
 	private boolean ticked;
 	private State lastState;
 	private double actualTickTimeMS;
+	private double ltt;
 
 	public TPSMonitor()
 	{
@@ -24,6 +25,7 @@ public abstract class TPSMonitor extends Thread
 		tickTimeProfiler.begin();
 		actualTickTimeMS = 0;
 		tickTimeMS = 0;
+		ltt = 0;
 		ticked = false;
 		lastState = State.RUNNABLE;
 	}
@@ -53,6 +55,8 @@ public abstract class TPSMonitor extends Thread
 				tickProfiler.reset();
 				tickProfiler.begin();
 				ticked = false;
+				actualTickTimeMS = actualTickTimeMS == 0 ? ltt : actualTickTimeMS;
+				ltt = actualTickTimeMS > 0 ? actualTickTimeMS : ltt;
 				onTicked();
 				actualTickTimeMS = 0;
 			}
