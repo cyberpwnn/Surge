@@ -9,12 +9,14 @@ import surge.math.Profiler;
 public class Bursterator<T> implements IBursterator<T>
 {
 	private Queue<T> queue;
-
-	private int
+	private double timeLock;
+	private double estimatedTime;
 
 	public Bursterator()
 	{
 		queue = new ConcurrentLinkedQueue<T>();
+		timeLock = -1;
+		estimatedTime = -1;
 	}
 
 	@Override
