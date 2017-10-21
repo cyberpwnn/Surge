@@ -40,6 +40,10 @@
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
+		<repository>
+			<id>surge</id>
+			<url>https://raw.githubusercontent.com/cyberpwnn/Surge/master/repository/</url>
+		</repository>
 	</repositories>
 	<dependencies>
 		<dependency>
