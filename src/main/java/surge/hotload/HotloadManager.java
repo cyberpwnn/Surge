@@ -46,18 +46,26 @@ public class HotloadManager implements IMasterTickComponent
 	{
 		for(File i : filemods.k())
 		{
-			if(i.exists() && (i.lastModified() != filemods.get(i) || i.length() != filesizes.get(i)))
+			try
 			{
-				D.v(i.getName() + " modified");
-				fileacts.get(i).run();
-				filemods.put(i, i.lastModified());
-				filesizes.put(i, i.length());
+				if(i.exists() && (i.lastModified() != filemods.get(i) || i.length() != filesizes.get(i)))
+				{
+					D.v(i.getName() + " modified");
+					fileacts.get(i).run();
+					filemods.put(i, i.lastModified());
+					filesizes.put(i, i.length());
+				}
+
+				if(!i.exists() || i.isDirectory())
+				{
+					D.v(i.getName() + " deleted, untracking.");
+					untrack(i);
+				}
 			}
 
-			if(!i.exists() || i.isDirectory())
+			catch(Exception e)
 			{
-				D.v(i.getName() + " deleted, untracking.");
-				untrack(i);
+
 			}
 		}
 	}

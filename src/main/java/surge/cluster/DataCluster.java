@@ -92,11 +92,6 @@ public class DataCluster
 				c = new ClusterLong(fc.getLong(i));
 			}
 
-			else
-			{
-				D.f("Unable to parse data in file configuration: " + i);
-			}
-
 			if(c != null)
 			{
 				clusters.put(i, c);
