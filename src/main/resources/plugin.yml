@@ -1,0 +1,6 @@
+# Use this as your main for headless plugins
+main: surge.Main 
+
+# Use your own stuff, not this crap
+name: ${project.name}
+version: ${project.version}
