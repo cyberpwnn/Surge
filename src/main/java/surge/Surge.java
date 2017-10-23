@@ -3,6 +3,8 @@ package surge;
 import java.io.File;
 
 import org.bukkit.Bukkit;
+import org.bukkit.event.HandlerList;
+import org.bukkit.event.Listener;
 
 import surge.collection.GList;
 import surge.control.AmpedPlugin;
@@ -18,6 +20,26 @@ public class Surge
 	private static TaskManager taskmgr;
 	private static HotloadManager hotloadmgr;
 	private static Thread mainThread;
+
+	public static void register(Listener l)
+	{
+		Bukkit.getServer().getPluginManager().registerEvents(l, getAmp().getPluginInstance());
+	}
+
+	public static void unregister(Listener l)
+	{
+		HandlerList.unregisterAll(l);
+	}
+
+	public static File folder(String f)
+	{
+		return new File(getAmp().getPluginInstance().getDataFolder(), f);
+	}
+
+	public static File folder()
+	{
+		return getAmp().getPluginInstance().getDataFolder();
+	}
 
 	public static File getPluginJarFile()
 	{
