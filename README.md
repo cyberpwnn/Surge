@@ -1,6 +1,3 @@
-# Surge
-A quick, shade-able api for making bukkit plugins quickly
-
 # Compiling with your Plugin
 You need maven to use Surge obviously if there is shading involved
 
@@ -16,7 +13,7 @@ In your pom.xml
 <dependency>
   <groupId>surge</groupId>
   <artifactId>Surge</artifactId>
-  <version>1.0</version>
+  <version>1.5</version>
   <scope>provided</scope>
 </dependency>
 ```
