@@ -1,7 +1,12 @@
 # Surge
 A quick, shade-able api for making bukkit plugins quickly
 
-### Maven Coordinates
+# Compiling with your Plugin
+You need maven to use Surge obviously if there is shading involved
+
+### 1. Add the maven coordinates to your pom
+
+In your pom.xml
 ``` xml
 <repository>
   <id>surge</id>
@@ -16,100 +21,73 @@ A quick, shade-able api for making bukkit plugins quickly
 </dependency>
 ```
 
-### Example Plugin
+### 2. Update your plugin.yml
+
+Your plugin.yml will no longer specify YOUR plugin. Instead it will specify a ghost plugin inside of surge (which will exist at runtime)
+``` yaml
+name: YOUR_NAME
+version: YOUR_VERSION
+main: surge.Main
+```
+
+### 3. Create a Plugin class
+
+You do not need to extend java plugin, just create a class like so
+
 ``` java
-package surge;
+import surge.control.Disable;
+import surge.control.Enable;
+import surge.control.Instance;
+import surge.control.Plugin;
 
-import java.io.File;
-
-import surge.control.AmpedPlugin;
-import surge.sched.Task;
-import surge.util.D;
-import surge.util.Protocol;
-
-public class TestPlugin extends AmpedPlugin
+@Plugin
+public class SomeCoolPlugin
 {
-	@Override
-	public void onStart(Protocol serverProtocol)
+	// Auto instance creation
+	@Instance
+	public SomeCoolPlugin instance;
+
+	@Enable
+	public void enable()
 	{
-		D.v("Minecraft Version: " + serverProtocol.toString());
-
-		// Get your plugin instance anywhere
-		Surge.getAmp().getPluginInstance();
-
-		// Track a file
-		Surge.getHotloadManager().track(new File("plugins/SomeJar.jar"), new Runnable()
-		{
-			@Override
-			public void run()
-			{
-				// This is already checked for your plugin jar
-				// Surge automatically reloads it when it's recompiled
-				D.w("File was modified!");
-			}
-		});
-
-		// Logging
-		D.l(this, "Simple logging, with instance ref");
-		D.l("info");
-		D.v("verbose");
-		D.f("fail");
-		D.w("warning");
-		D.s("success");
-
-		// Tasks
-		new Task("update-check?")
-		{
-			@Override
-			public void run()
-			{
-				D.v("fires once");
-			}
-		};
-
-		// Repeating Tasks
-		new Task("repeat-every-tick", 0)
-		{
-			@Override
-			public void run()
-			{
-				D.v("Run Time: " + getActiveTime());
-				D.v("Compute Time: " + getComputeTime());
-				D.v("Total Compute Time: " + getTotalComputeTime());
-
-				// cancel it anywhere any time
-				cancel();
-			}
-		};
-
-		// Repeating Tasks with limits
-		new Task("repeat every second for 10 seconds", 20, 10)
-		{
-			@Override
-			public void run()
-			{
-				D.v("Tick!");
-			}
-		};
+		// you can call this method whatever you like
 	}
 
-	@Override
-	public void onStop()
+	@Disable
+	public void disable()
 	{
-		D.v("Plugin onStop()");
-	}
-
-	@Override
-	public void onPreInit()
-	{
-		D.v("Plugin onPreInit()");
-	}
-
-	@Override
-	public void onPostInit()
-	{
-		D.v("Plugin onPostInit()");
+		// you can call this method whatever you like
 	}
 }
+```
 
+### 4. Configure your pom SHADE plugin
+You need to include surge in your jar
+
+In your build section: 
+``` xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>3.1.0</version>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+                    <configuration>
+		        <artifactSet>
+                            <includes>
+                                <include>surge:Surge</include>
+                            </includes>
+                        </artifactSet>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
 ```
