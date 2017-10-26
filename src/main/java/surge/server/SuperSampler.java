@@ -23,6 +23,12 @@ public class SuperSampler implements IMasterTickComponent
 	private long memoryAllocated;
 	private long memoryCollected;
 	private long mahs;
+	private int totalChunks;
+	private int totalEntities;
+	private int totalDrops;
+	private int totalTiles;
+	private int totalLiving;
+	private WorldMonitor worldMonitor;
 	private TPSMonitor tpsMonitor;
 	private MemoryMonitor memoryMonitor;
 
@@ -32,6 +38,11 @@ public class SuperSampler implements IMasterTickComponent
 		ticksPerSecondL = new Average(6);
 		mahL = new Average(20);
 		tickTimeL = new Average(6);
+		totalChunks = 0;
+		totalEntities = 0;
+		totalDrops = 0;
+		totalTiles = 0;
+		totalLiving = 0;
 		ticksPerSecondRaw = 0;
 		ticksPerSecond = 0;
 		tickTimeRaw = 0;
@@ -42,6 +53,19 @@ public class SuperSampler implements IMasterTickComponent
 		memoryAllocated = 0;
 		memoryCollected = 0;
 		mahs = 0;
+
+		worldMonitor = new WorldMonitor()
+		{
+			@Override
+			public void updated(int totalChunks, int totalDrops, int totalTiles, int totalLiving, int totalEntities)
+			{
+				SuperSampler.this.totalChunks = totalChunks;
+				SuperSampler.this.totalDrops = totalDrops;
+				SuperSampler.this.totalTiles = totalTiles;
+				SuperSampler.this.totalEntities = totalEntities;
+				SuperSampler.this.totalLiving = totalLiving;
+			}
+		};
 
 		tpsMonitor = new TPSMonitor()
 		{
@@ -189,5 +213,35 @@ public class SuperSampler implements IMasterTickComponent
 	public long getMahs()
 	{
 		return mahs;
+	}
+
+	public int getTotalChunks()
+	{
+		return totalChunks;
+	}
+
+	public int getTotalEntities()
+	{
+		return totalEntities;
+	}
+
+	public int getTotalDrops()
+	{
+		return totalDrops;
+	}
+
+	public int getTotalTiles()
+	{
+		return totalTiles;
+	}
+
+	public int getTotalLiving()
+	{
+		return totalLiving;
+	}
+
+	public WorldMonitor getWorldMonitor()
+	{
+		return worldMonitor;
 	}
 }
