@@ -175,6 +175,12 @@ public abstract class WorldMonitor extends Thread implements Listener
 		if(updated || TICK.tick % 1000 == 0)
 		{
 			updated(totalChunks, totalDrops, totalTiles, totalLiving, totalEntities, chunksLoaded, chunksUnloaded);
+
+			if(TICK.tick % 1000 == 0)
+			{
+				chunksLoaded = 0;
+				chunksLoaded = 0;
+			}
 		}
 	}
 
