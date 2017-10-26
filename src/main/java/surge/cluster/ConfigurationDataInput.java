@@ -5,6 +5,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
+import surge.util.D;
+
 public class ConfigurationDataInput
 {
 	@SuppressWarnings("unchecked")
@@ -25,6 +27,11 @@ public class ConfigurationDataInput
 		{
 			if(Modifier.isStatic(i.getModifiers()) || Modifier.isFinal(i.getModifiers()) || !Modifier.isPublic(i.getModifiers()) || !i.isAnnotationPresent(Key.class))
 			{
+				if(i.isAnnotationPresent(Key.class))
+				{
+					D.w("Field: " + i.getName() + " is either static, final, or private");
+				}
+
 				continue;
 			}
 

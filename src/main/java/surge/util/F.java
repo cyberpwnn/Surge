@@ -175,7 +175,7 @@ public class F
 	public static String ofSize(long s, int div)
 	{
 		Double d = (double) s;
-		String sub = "Bytes";
+		String sub = "B";
 
 		if(d > div - 1)
 		{
@@ -201,7 +201,39 @@ public class F
 			}
 		}
 
-		return F.f(d, 2) + " " + sub;
+		return F.f(d, 0) + sub.toLowerCase();
+	}
+
+	public static String ofSize(long s, int div, C ecol)
+	{
+		Double d = (double) s;
+		String sub = "B";
+
+		if(d > div - 1)
+		{
+			d /= div;
+			sub = "KB";
+
+			if(d > div - 1)
+			{
+				d /= div;
+				sub = "MB";
+
+				if(d > div - 1)
+				{
+					d /= div;
+					sub = "GB";
+
+					if(d > div - 1)
+					{
+						d /= div;
+						sub = "TB";
+					}
+				}
+			}
+		}
+
+		return F.f(d, 0) + ecol + sub.toLowerCase();
 	}
 
 	/**
