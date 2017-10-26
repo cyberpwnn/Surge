@@ -28,6 +28,8 @@ public class SuperSampler implements IMasterTickComponent
 	private int totalDrops;
 	private int totalTiles;
 	private int totalLiving;
+	private int chunksLoaded = 0;
+	private int chunksUnloaded = 0;
 	private WorldMonitor worldMonitor;
 	private TPSMonitor tpsMonitor;
 	private MemoryMonitor memoryMonitor;
@@ -52,18 +54,22 @@ public class SuperSampler implements IMasterTickComponent
 		memoryUse = 0;
 		memoryAllocated = 0;
 		memoryCollected = 0;
+		chunksLoaded = 0;
+		chunksUnloaded = 0;
 		mahs = 0;
 
 		worldMonitor = new WorldMonitor()
 		{
 			@Override
-			public void updated(int totalChunks, int totalDrops, int totalTiles, int totalLiving, int totalEntities)
+			public void updated(int totalChunks, int totalDrops, int totalTiles, int totalLiving, int totalEntities, int chunksLoaded, int chunksUnloaded)
 			{
 				SuperSampler.this.totalChunks = totalChunks;
 				SuperSampler.this.totalDrops = totalDrops;
 				SuperSampler.this.totalTiles = totalTiles;
 				SuperSampler.this.totalEntities = totalEntities;
 				SuperSampler.this.totalLiving = totalLiving;
+				SuperSampler.this.chunksLoaded = chunksLoaded;
+				SuperSampler.this.chunksUnloaded = chunksUnloaded;
 			}
 		};
 
@@ -243,5 +249,140 @@ public class SuperSampler implements IMasterTickComponent
 	public WorldMonitor getWorldMonitor()
 	{
 		return worldMonitor;
+	}
+
+	public int getChunksLoaded()
+	{
+		return chunksLoaded;
+	}
+
+	public int getChunksUnloaded()
+	{
+		return chunksUnloaded;
+	}
+
+	public void setTicksPerSecondL(Average ticksPerSecondL)
+	{
+		this.ticksPerSecondL = ticksPerSecondL;
+	}
+
+	public void setTickTimeL(Average tickTimeL)
+	{
+		this.tickTimeL = tickTimeL;
+	}
+
+	public void setMahL(Average mahL)
+	{
+		this.mahL = mahL;
+	}
+
+	public void setTicksPerSecond(double ticksPerSecond)
+	{
+		this.ticksPerSecond = ticksPerSecond;
+	}
+
+	public void setTicksPerSecondRaw(double ticksPerSecondRaw)
+	{
+		this.ticksPerSecondRaw = ticksPerSecondRaw;
+	}
+
+	public void setTickTime(double tickTime)
+	{
+		this.tickTime = tickTime;
+	}
+
+	public void setTickTimeRaw(double tickTimeRaw)
+	{
+		this.tickTimeRaw = tickTimeRaw;
+	}
+
+	public void setRunning(boolean running)
+	{
+		this.running = running;
+	}
+
+	public void setTickUtilizationRaw(double tickUtilizationRaw)
+	{
+		this.tickUtilizationRaw = tickUtilizationRaw;
+	}
+
+	public void setTickUtilization(double tickUtilization)
+	{
+		this.tickUtilization = tickUtilization;
+	}
+
+	public void setLeftoverTickTime(double leftoverTickTime)
+	{
+		this.leftoverTickTime = leftoverTickTime;
+	}
+
+	public void setMemoryUse(long memoryUse)
+	{
+		this.memoryUse = memoryUse;
+	}
+
+	public void setMemoryAllocated(long memoryAllocated)
+	{
+		this.memoryAllocated = memoryAllocated;
+	}
+
+	public void setMemoryCollected(long memoryCollected)
+	{
+		this.memoryCollected = memoryCollected;
+	}
+
+	public void setMahs(long mahs)
+	{
+		this.mahs = mahs;
+	}
+
+	public void setTotalChunks(int totalChunks)
+	{
+		this.totalChunks = totalChunks;
+	}
+
+	public void setTotalEntities(int totalEntities)
+	{
+		this.totalEntities = totalEntities;
+	}
+
+	public void setTotalDrops(int totalDrops)
+	{
+		this.totalDrops = totalDrops;
+	}
+
+	public void setTotalTiles(int totalTiles)
+	{
+		this.totalTiles = totalTiles;
+	}
+
+	public void setTotalLiving(int totalLiving)
+	{
+		this.totalLiving = totalLiving;
+	}
+
+	public void setChunksLoaded(int chunksLoaded)
+	{
+		this.chunksLoaded = chunksLoaded;
+	}
+
+	public void setChunksUnloaded(int chunksUnloaded)
+	{
+		this.chunksUnloaded = chunksUnloaded;
+	}
+
+	public void setWorldMonitor(WorldMonitor worldMonitor)
+	{
+		this.worldMonitor = worldMonitor;
+	}
+
+	public void setTpsMonitor(TPSMonitor tpsMonitor)
+	{
+		this.tpsMonitor = tpsMonitor;
+	}
+
+	public void setMemoryMonitor(MemoryMonitor memoryMonitor)
+	{
+		this.memoryMonitor = memoryMonitor;
 	}
 }

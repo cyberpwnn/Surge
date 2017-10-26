@@ -17,6 +17,7 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 
 import surge.Surge;
+import surge.sched.TICK;
 
 @SuppressWarnings("deprecation")
 public abstract class WorldMonitor extends Thread implements Listener
@@ -32,6 +33,8 @@ public abstract class WorldMonitor extends Thread implements Listener
 	private int totalTiles = 0;
 	private int totalLiving = 0;
 	private int totalEntities = 0;
+	private int chunksLoaded = 0;
+	private int chunksUnloaded = 0;
 
 	public WorldMonitor()
 	{
@@ -58,7 +61,7 @@ public abstract class WorldMonitor extends Thread implements Listener
 		Surge.unregister(this);
 	}
 
-	public abstract void updated(int totalChunks, int totalDrops, int totalTiles, int totalLiving, int totalEntities);
+	public abstract void updated(int totalChunks, int totalDrops, int totalTiles, int totalLiving, int totalEntities, int chunksLoaded, int chunksUnloaded);
 
 	@EventHandler
 	public void on(ChunkLoadEvent e)
@@ -67,6 +70,7 @@ public abstract class WorldMonitor extends Thread implements Listener
 		tileChanged = true;
 		livingChanged = true;
 		dropChanged = true;
+		chunksLoaded++;
 	}
 
 	@EventHandler
@@ -76,6 +80,7 @@ public abstract class WorldMonitor extends Thread implements Listener
 		tileChanged = true;
 		livingChanged = true;
 		dropChanged = true;
+		chunksUnloaded++;
 	}
 
 	@EventHandler
@@ -167,9 +172,9 @@ public abstract class WorldMonitor extends Thread implements Listener
 			doUpdate();
 		}
 
-		if(updated)
+		if(updated || TICK.tick % 1000 == 0)
 		{
-			updated(totalChunks, totalDrops, totalTiles, totalLiving, totalEntities);
+			updated(totalChunks, totalDrops, totalTiles, totalLiving, totalEntities, chunksLoaded, chunksUnloaded);
 		}
 	}
 
