@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
+import surge.collection.GMap;
 import surge.util.D;
 
 public class ConfigurationDataInput
@@ -14,6 +15,7 @@ public class ConfigurationDataInput
 	{
 		DataCluster current = new DataCluster();
 		Class<? extends IConfigurable> clazz = c.getClass();
+		GMap<Integer, String> keystore = null;
 
 		if(!f.exists())
 		{
@@ -60,6 +62,67 @@ public class ConfigurationDataInput
 					break;
 			}
 		}
+
+		for(Field i : clazz.getDeclaredFields())
+		{
+			if(!Modifier.isStatic(i.getModifiers()) || Modifier.isFinal(i.getModifiers()) || !Modifier.isPublic(i.getModifiers()) || !i.isAnnotationPresent(KeyStore.class))
+			{
+				continue;
+			}
+
+			Object o = i.get(null);
+
+			if(o instanceof GMap)
+			{
+				keystore = (GMap<Integer, String>) o;
+				break;
+			}
+		}
+
+		if(keystore != null)
+		{
+			for(Field i : clazz.getDeclaredFields())
+			{
+				if(Modifier.isStatic(i.getModifiers()) || Modifier.isFinal(i.getModifiers()) || !Modifier.isPublic(i.getModifiers()) || !i.isAnnotationPresent(KeyPointer.class))
+				{
+					continue;
+				}
+
+				KeyPointer k = i.getAnnotation(KeyPointer.class);
+				int point = k.value();
+				String skey = keystore.get(point);
+
+				if(skey == null)
+				{
+					D.f("Cannot find key for " + point + " (" + i.getDeclaringClass().getSimpleName() + ":" + i.getName() + ")");
+					continue;
+				}
+
+				Object raw = current.get(skey);
+
+				switch(current.getType(skey))
+				{
+					case BOOLEAN:
+						i.set(c, (Boolean) raw);
+						break;
+					case DOUBLE:
+						i.set(c, (Double) raw);
+						break;
+					case INT:
+						i.set(c, (Integer) raw);
+						break;
+					case LONG:
+						i.set(c, (Long) raw);
+						break;
+					case STRING:
+						i.set(c, (String) raw);
+						break;
+					case STRING_LIST:
+						i.set(c, (List<String>) raw);
+						break;
+				}
+			}
+		}
 	}
 
 	@SuppressWarnings("unchecked")
@@ -67,6 +130,7 @@ public class ConfigurationDataInput
 	{
 		DataCluster cc = new DataCluster();
 		Class<? extends IConfigurable> clazz = c.getClass();
+		GMap<Integer, String> keystore = null;
 
 		for(Field i : clazz.getDeclaredFields())
 		{
@@ -112,6 +176,80 @@ public class ConfigurationDataInput
 			else
 			{
 				throw new ReflectiveOperationException("Unknown TYPE: " + val.getClass());
+			}
+		}
+
+		for(Field i : clazz.getDeclaredFields())
+		{
+			if(!Modifier.isStatic(i.getModifiers()) || Modifier.isFinal(i.getModifiers()) || !Modifier.isPublic(i.getModifiers()) || !i.isAnnotationPresent(KeyStore.class))
+			{
+				continue;
+			}
+
+			Object o = i.get(null);
+
+			if(o instanceof GMap)
+			{
+				keystore = (GMap<Integer, String>) o;
+				break;
+			}
+		}
+
+		if(keystore != null)
+		{
+			for(Field i : clazz.getDeclaredFields())
+			{
+				if(Modifier.isStatic(i.getModifiers()) || Modifier.isFinal(i.getModifiers()) || !Modifier.isPublic(i.getModifiers()) || !i.isAnnotationPresent(KeyPointer.class))
+				{
+					continue;
+				}
+
+				KeyPointer k = i.getAnnotation(KeyPointer.class);
+				int point = k.value();
+				String skey = keystore.get(point);
+
+				if(skey == null)
+				{
+					D.f("Cannot find key for " + point + " (" + i.getDeclaringClass().getSimpleName() + ":" + i.getName() + ")");
+					continue;
+				}
+
+				Object val = i.get(c);
+
+				if(val instanceof Integer)
+				{
+					cc.set(skey, (Integer) val);
+				}
+
+				else if(val instanceof String)
+				{
+					cc.set(skey, (String) val);
+				}
+
+				else if(val instanceof Double)
+				{
+					cc.set(skey, (Double) val);
+				}
+
+				else if(val instanceof Boolean)
+				{
+					cc.set(skey, (Boolean) val);
+				}
+
+				else if(val instanceof Long)
+				{
+					cc.set(skey, (Long) val);
+				}
+
+				else if(val instanceof List)
+				{
+					cc.set(skey, (List<String>) val);
+				}
+
+				else
+				{
+					throw new ReflectiveOperationException("Unknown TYPE: " + val.getClass());
+				}
 			}
 		}
 
