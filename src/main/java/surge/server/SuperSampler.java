@@ -118,6 +118,7 @@ public class SuperSampler implements IMasterTickComponent
 	{
 		tpsMonitor.interrupt();
 		memoryMonitor.interrupt();
+		worldMonitor.interrupt();
 		running = false;
 		Surge.unregisterTicked(this);
 	}

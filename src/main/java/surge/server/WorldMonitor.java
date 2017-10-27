@@ -17,7 +17,7 @@ import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 
 import surge.Surge;
-import surge.sched.TICK;
+import surge.math.M;
 
 @SuppressWarnings("deprecation")
 public abstract class WorldMonitor extends Thread implements Listener
@@ -35,10 +35,12 @@ public abstract class WorldMonitor extends Thread implements Listener
 	private int totalEntities = 0;
 	private int chunksLoaded = 0;
 	private int chunksUnloaded = 0;
+	private long ms = M.ms();
 
 	public WorldMonitor()
 	{
 		Surge.register(this);
+		setName("Surge World Monitor");
 	}
 
 	@Override
@@ -54,7 +56,7 @@ public abstract class WorldMonitor extends Thread implements Listener
 
 			catch(Exception e)
 			{
-				e.printStackTrace();
+
 			}
 		}
 
@@ -172,12 +174,13 @@ public abstract class WorldMonitor extends Thread implements Listener
 			doUpdate();
 		}
 
-		if(updated || TICK.tick % 1000 == 0)
+		if(updated || M.ms() - ms > 1000)
 		{
 			updated(totalChunks, totalDrops, totalTiles, totalLiving, totalEntities, chunksLoaded, chunksUnloaded);
 
-			if(TICK.tick % 1000 == 0)
+			if(M.ms() - ms > 1000)
 			{
+				ms = M.ms();
 				chunksLoaded = 0;
 				chunksLoaded = 0;
 			}

@@ -60,7 +60,6 @@ public abstract class TPSMonitor extends Thread
 				onTicked();
 				actualTickTimeMS = 0;
 			}
-
 		}
 	}
 

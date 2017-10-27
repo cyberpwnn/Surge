@@ -17,7 +17,7 @@ public abstract class AmpedPlugin extends JavaPlugin implements SurgePlugin, IMa
 	public AmpedPlugin()
 	{
 		controllers = new GList<IController>();
-		pp = new ParallelPoolManager("amp-worker", 4, QueueMode.ROUND_ROBIN);
+		pp = new ParallelPoolManager("Cruncher", 4, QueueMode.ROUND_ROBIN);
 		onControllerRegistry();
 		onPreInit();
 	}

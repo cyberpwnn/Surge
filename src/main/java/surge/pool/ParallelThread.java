@@ -15,7 +15,7 @@ public class ParallelThread extends Thread
 		queue = new ConcurrentLinkedQueue<Execution>();
 		info = new ThreadInformation(id);
 		setPriority(MAX_PRIORITY);
-		setName("Wormhole " + key + " " + id);
+		setName("Surge " + key + " " + id);
 	}
 
 	@Override
