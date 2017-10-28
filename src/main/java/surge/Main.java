@@ -30,7 +30,7 @@ public class Main extends AmpedPlugin
 	private GList<Class<?>> plugins;
 	private GMap<Object, Method> pluginInstances;
 	private GList<Controller> controllerSet;
-	public GMap<Integer, GList<Class<?>>> anchors;
+	public static GMap<Integer, GList<Class<?>>> anchors;
 
 	@Override
 	public void onControllerRegistry()
@@ -331,7 +331,7 @@ public class Main extends AmpedPlugin
 				Object controller = conCon.newInstance();
 				j.set(plugin, controller);
 				controllerSet.add((Controller) controller);
-				D.v("@Control " + conCon.getClass().getSimpleName());
+				D.v("@Control " + controller.getClass().getSimpleName());
 			}
 
 			if(enableMethod != null)
@@ -384,6 +384,7 @@ public class Main extends AmpedPlugin
 					}
 
 					anchors.get(s).add(clazz);
+					D.v("@Anchor(" + s + ") " + clazz.getSimpleName());
 				}
 			}
 		}
