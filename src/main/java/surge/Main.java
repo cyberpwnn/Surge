@@ -21,6 +21,7 @@ import surge.control.Enable;
 import surge.control.IController;
 import surge.control.Instance;
 import surge.control.Plugin;
+import surge.util.Anchor;
 import surge.util.D;
 import surge.util.Protocol;
 
@@ -29,6 +30,7 @@ public class Main extends AmpedPlugin
 	private GList<Class<?>> plugins;
 	private GMap<Object, Method> pluginInstances;
 	private GList<Controller> controllerSet;
+	public GMap<Integer, GList<Class<?>>> anchors;
 
 	@Override
 	public void onControllerRegistry()
@@ -41,6 +43,7 @@ public class Main extends AmpedPlugin
 	{
 		try
 		{
+			anchors = new GMap<Integer, GList<Class<?>>>();
 			controllerSet = new GList<Controller>();
 			plugins = new GList<Class<?>>();
 			scanForAmps();
@@ -369,6 +372,18 @@ public class Main extends AmpedPlugin
 				{
 					plugins.add(clazz);
 					D.v("Found Plugin: " + clazz);
+				}
+
+				if(clazz.isAnnotationPresent(Anchor.class))
+				{
+					int s = clazz.getAnnotation(Anchor.class).value();
+
+					if(!anchors.containsKey(s))
+					{
+						anchors.put(s, new GList<Class<?>>());
+					}
+
+					anchors.get(s).add(clazz);
 				}
 			}
 		}
