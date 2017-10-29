@@ -81,6 +81,8 @@ public abstract class AmpedPlugin extends JavaPlugin implements SurgePlugin, IMa
 		{
 			i.tick();
 		}
+
+		pp.tickSyncQueue();
 	}
 
 	@Override

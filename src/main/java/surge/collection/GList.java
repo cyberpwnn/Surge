@@ -25,6 +25,16 @@ public class GList<T> extends ArrayList<T>
 		add(array);
 	}
 
+	public GList(Iterator<T> it)
+	{
+		super();
+
+		while(it.hasNext())
+		{
+			add(it.next());
+		}
+	}
+
 	public GList(List<T> array)
 	{
 		super();
