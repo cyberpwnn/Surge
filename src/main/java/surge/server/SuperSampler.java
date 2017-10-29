@@ -86,7 +86,6 @@ public class SuperSampler implements IMasterTickComponent
 				tickTime = tickTimeL.getAverage();
 				tickUtilizationRaw = tickTimeRaw / 50.0;
 				tickUtilization = tickTime / 50.0;
-				ticksPerSecond = ticksPerSecond > 20 ? 20 : ticksPerSecond;
 				leftoverTickTime = 50 - tickUtilization < 0 ? 0 : 50 - tickUtilization;
 			}
 		};

@@ -38,20 +38,20 @@ public class F
 	{
 		if(ms < 1000.0)
 		{
-			return F.f(ms, prec) + " ms";
+			return F.f(ms, prec) + "ms";
 		}
 
 		if(ms / 1000.0 < 60.0)
 		{
-			return F.f(ms / 1000.0, prec) + " seconds";
+			return F.f(ms / 1000.0, prec) + "s";
 		}
 
 		if(ms / 1000.0 / 60.0 < 60.0)
 		{
-			return F.f(ms / 1000.0 / 60.0, prec) + " minutes";
+			return F.f(ms / 1000.0 / 60.0, prec) + "m";
 		}
 
-		return F.f(ms, prec) + " ms";
+		return F.f(ms, prec) + "ms";
 	}
 
 	public static String b(int i)

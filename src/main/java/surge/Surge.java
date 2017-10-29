@@ -11,12 +11,14 @@ import surge.control.AmpedPlugin;
 import surge.hotload.HotloadManager;
 import surge.sched.IMasterTickComponent;
 import surge.sched.TaskManager;
+import surge.server.AsyncTick;
 import surge.util.PluginUtil;
 
 public class Surge
 {
 	protected static PluginAmp amp = null;
 	private static GList<IMasterTickComponent> tickComponents = new GList<IMasterTickComponent>();
+	private static GList<IMasterTickComponent> atickComponents = new GList<IMasterTickComponent>();
 	private static TaskManager taskmgr;
 	private static HotloadManager hotloadmgr;
 	private static Thread mainThread;
@@ -64,13 +66,30 @@ public class Surge
 		return tickComponents;
 	}
 
+	public static GList<IMasterTickComponent> getAsyncTickComponents()
+	{
+		return atickComponents;
+	}
+
 	public static void registerTicked(IMasterTickComponent tick)
 	{
+		if(tick.getClass().isAnnotationPresent(AsyncTick.class))
+		{
+			atickComponents.add(tick);
+			return;
+		}
+
 		tickComponents.add(tick);
 	}
 
 	public static void unregisterTicked(IMasterTickComponent tick)
 	{
+		if(tick.getClass().isAnnotationPresent(AsyncTick.class))
+		{
+			atickComponents.remove(tick);
+			return;
+		}
+
 		tickComponents.remove(tick);
 	}
 

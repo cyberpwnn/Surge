@@ -3,7 +3,6 @@ package surge.server;
 import surge.Surge;
 import surge.math.M;
 import surge.math.Profiler;
-import surge.util.D;
 
 public abstract class TPSMonitor extends Thread
 {
@@ -15,6 +14,7 @@ public abstract class TPSMonitor extends Thread
 	private State lastState;
 	private double actualTickTimeMS;
 	private double ltt;
+	private long lastTick;
 
 	public TPSMonitor()
 	{
@@ -28,6 +28,7 @@ public abstract class TPSMonitor extends Thread
 		ltt = 0;
 		ticked = false;
 		lastState = State.RUNNABLE;
+		lastTick = M.ms();
 	}
 
 	public abstract void onTicked();
@@ -44,7 +45,7 @@ public abstract class TPSMonitor extends Thread
 
 			else
 			{
-				D.f(this, "Cannot find main server thread!");
+
 			}
 
 			if(ticked)
@@ -59,6 +60,14 @@ public abstract class TPSMonitor extends Thread
 				ltt = actualTickTimeMS > 0 ? actualTickTimeMS : ltt;
 				onTicked();
 				actualTickTimeMS = 0;
+				lastTick = M.ms();
+			}
+
+			else if(M.ms() - lastTick > 300)
+			{
+				rawTicksPerSecond = -(M.ms() - lastTick);
+				tickTimeMS = M.ms() - lastTick;
+				onTicked();
 			}
 		}
 	}
@@ -77,7 +86,6 @@ public abstract class TPSMonitor extends Thread
 
 		if(!state.equals(State.TIMED_WAITING) && !state.equals(State.RUNNABLE))
 		{
-			System.out.println(state);
 			return;
 		}
 

@@ -7,17 +7,20 @@ import surge.collection.GList;
 import surge.pool.ParallelPoolManager;
 import surge.pool.QueueMode;
 import surge.sched.IMasterTickComponent;
+import surge.server.CoreTickThread;
 import surge.util.Protocol;
 
 public abstract class AmpedPlugin extends JavaPlugin implements SurgePlugin, IMasterTickComponent
 {
 	private GList<IController> controllers;
 	private ParallelPoolManager pp;
+	private CoreTickThread ctt;
 
 	public AmpedPlugin()
 	{
 		controllers = new GList<IController>();
 		pp = new ParallelPoolManager("Cruncher", 4, QueueMode.ROUND_ROBIN);
+		ctt = new CoreTickThread();
 		onControllerRegistry();
 		onPreInit();
 	}
@@ -27,6 +30,7 @@ public abstract class AmpedPlugin extends JavaPlugin implements SurgePlugin, IMa
 	{
 		onPostInit();
 		pp.start();
+		ctt.start();
 	}
 
 	@Override
@@ -54,6 +58,7 @@ public abstract class AmpedPlugin extends JavaPlugin implements SurgePlugin, IMa
 		onStop();
 
 		pp.shutdown();
+		ctt.interrupt();
 		Surge.getAmp().disconnect();
 	}
 
