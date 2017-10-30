@@ -404,5 +404,7 @@ public class Main extends AmpedPlugin
 		{
 			i.tick();
 		}
+
+		getThreadPool().tickSyncQueue();
 	}
 }

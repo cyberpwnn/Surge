@@ -2,6 +2,7 @@ package surge.pool;
 
 import java.util.ConcurrentModificationException;
 import java.util.Queue;
+import java.util.concurrent.ConcurrentLinkedQueue;
 
 import surge.collection.GList;
 import surge.math.M;
@@ -24,9 +25,18 @@ public class ParallelPoolManager
 
 	public void tickSyncQueue()
 	{
+		long ns = M.ns();
+
 		while(!squeue.isEmpty())
 		{
 			squeue.poll().run();
+
+			long nns = M.ns() - ns;
+
+			if(nns > 250000)
+			{
+				break;
+			}
 		}
 	}
 
@@ -55,6 +65,7 @@ public class ParallelPoolManager
 		this.mode = mode;
 		key = "Worker Thread";
 		info = new ThreadInformation(-1);
+		squeue = new ConcurrentLinkedQueue<Execution>();
 	}
 
 	public long lock()
@@ -168,25 +179,25 @@ public class ParallelPoolManager
 
 		switch(mode)
 		{
-		case ROUND_ROBIN:
-			next = (next > threads.size() - 1 ? 0 : next + 1);
-			id = next;
-		case SMALLEST:
-			int min = Integer.MAX_VALUE;
+			case ROUND_ROBIN:
+				next = (next > threads.size() - 1 ? 0 : next + 1);
+				id = next;
+			case SMALLEST:
+				int min = Integer.MAX_VALUE;
 
-			for(ParallelThread i : threads)
-			{
-				int size = i.getQueue().size();
-
-				if(size < min)
+				for(ParallelThread i : threads)
 				{
-					min = size;
-					id = i.getInfo().getId();
-				}
-			}
+					int size = i.getQueue().size();
 
-		default:
-			break;
+					if(size < min)
+					{
+						min = size;
+						id = i.getInfo().getId();
+					}
+				}
+
+			default:
+				break;
 		}
 
 		return threads.get(id);
