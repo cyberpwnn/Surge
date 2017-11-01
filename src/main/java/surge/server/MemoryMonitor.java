@@ -79,6 +79,16 @@ public abstract class MemoryMonitor extends Thread
 				mah = 0;
 				onAllocationSet();
 			}
+
+			try
+			{
+				Thread.sleep(1);
+			}
+
+			catch(InterruptedException e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 

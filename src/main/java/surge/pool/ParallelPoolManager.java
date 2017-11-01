@@ -33,7 +33,7 @@ public class ParallelPoolManager
 
 			long nns = M.ns() - ns;
 
-			if(nns > 250000)
+			if(nns > 1000000)
 			{
 				break;
 			}

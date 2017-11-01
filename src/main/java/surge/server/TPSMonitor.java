@@ -69,6 +69,16 @@ public abstract class TPSMonitor extends Thread
 				tickTimeMS = M.ms() - lastTick;
 				onTicked();
 			}
+
+			try
+			{
+				Thread.sleep(1);
+			}
+
+			catch(InterruptedException e)
+			{
+				e.printStackTrace();
+			}
 		}
 	}
 
