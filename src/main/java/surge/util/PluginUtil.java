@@ -364,6 +364,33 @@ public class PluginUtil
 		return null;
 	}
 
+	public static String getPluginFileNameUnsafe(String name, Plugin ins)
+	{
+		File pluginDir = ins.getDataFolder().getParentFile();
+
+		for(File f : pluginDir.listFiles())
+		{
+			if(f.getName().endsWith(".jar"))
+			{
+				try
+				{
+					PluginDescriptionFile desc = ins.getPluginLoader().getPluginDescription(f);
+					if(desc.getName().equalsIgnoreCase(name))
+					{
+						return f.getName();
+					}
+				}
+
+				catch(InvalidDescriptionException e)
+				{
+
+				}
+			}
+		}
+
+		return null;
+	}
+
 	/**
 	 * Loads and enables a plugin.
 	 *

@@ -5,6 +5,7 @@ import java.io.File;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 
 import surge.collection.GList;
 import surge.control.AmpedPlugin;
@@ -47,6 +48,13 @@ public class Surge
 	{
 		File parent = getAmp().getPluginInstance().getDataFolder().getParentFile();
 		String plname = PluginUtil.getPluginFileName(getAmp().getPluginInstance().getName());
+		return new File(parent, plname);
+	}
+
+	public static File getPluginJarFileUnsafe(Plugin main)
+	{
+		File parent = main.getDataFolder().getParentFile();
+		String plname = PluginUtil.getPluginFileNameUnsafe(main.getName(), main);
 		return new File(parent, plname);
 	}
 

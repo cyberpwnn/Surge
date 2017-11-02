@@ -8,7 +8,7 @@ import surge.collection.GList;
 import surge.math.M;
 import surge.util.D;
 
-public class ParallelPoolManager
+public abstract class ParallelPoolManager
 {
 	private QueueMode mode;
 	private GList<ParallelThread> threads;
@@ -23,6 +23,8 @@ public class ParallelPoolManager
 		squeue.offer(e);
 	}
 
+	public abstract long getNanoGate();
+
 	public void tickSyncQueue()
 	{
 		long ns = M.ns();
@@ -33,7 +35,7 @@ public class ParallelPoolManager
 
 			long nns = M.ns() - ns;
 
-			if(nns > 1000000)
+			if(nns > getNanoGate())
 			{
 				break;
 			}

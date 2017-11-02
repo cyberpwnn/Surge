@@ -23,7 +23,14 @@ import surge.control.Instance;
 import surge.control.Plugin;
 import surge.util.Anchor;
 import surge.util.D;
+import surge.util.DynamicConfiguration;
+import surge.util.DynamicTracker;
+import surge.util.PluginUtil;
+import surge.util.PoolCount;
+import surge.util.PoolDescriber;
+import surge.util.PoolNanoThrottle;
 import surge.util.Protocol;
+import surge.util.RawEvent;
 
 public class Main extends AmpedPlugin
 {
@@ -31,6 +38,44 @@ public class Main extends AmpedPlugin
 	private GMap<Object, Method> pluginInstances;
 	private GList<Controller> controllerSet;
 	public static GMap<Integer, GList<Class<?>>> anchors;
+	private static final GList<Class<?>> classes = new GList<Class<?>>();
+	private static Field nsField = null;
+	private static Field thField = null;
+	private static final GList<Method> tracks = new GList<Method>();
+	public static long nsf = -1;
+
+	public Main()
+	{
+		super();
+
+		try
+		{
+			anchors = new GMap<Integer, GList<Class<?>>>();
+			controllerSet = new GList<Controller>();
+			plugins = new GList<Class<?>>();
+			scanForAmps();
+		}
+
+		catch(IOException e)
+		{
+			e.printStackTrace();
+		}
+
+		catch(SecurityException e)
+		{
+			e.printStackTrace();
+		}
+
+		catch(IllegalArgumentException e)
+		{
+			e.printStackTrace();
+		}
+
+		catch(ClassNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	public void onControllerRegistry()
@@ -39,20 +84,69 @@ public class Main extends AmpedPlugin
 	}
 
 	@Override
+	public long getNanoSync()
+	{
+		if(nsField == null)
+		{
+			return 100000;
+		}
+
+		if(nsf < 0)
+		{
+			try
+			{
+				nsf = (long) nsField.get(null);
+			}
+
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				nsf = 100000;
+			}
+		}
+
+		return nsf;
+	}
+
+	public static void requestResetNanos()
+	{
+		Main.nsf = -1;
+	}
+
+	public static void requestReload()
+	{
+		String name = Surge.getAmp().getPluginInstance().getName();
+		PluginUtil.unload(Surge.getAmp().getPluginInstance());
+		PluginUtil.load(name);
+	}
+
+	@Override
+	public int getThreadCount()
+	{
+		if(thField == null)
+		{
+			return 2;
+		}
+
+		try
+		{
+			return (int) thField.get(null);
+		}
+
+		catch(Exception e)
+		{
+			e.printStackTrace();
+
+			return 2;
+		}
+	}
+
+	@Override
 	public void onStart(Protocol serverProtocol)
 	{
 		try
 		{
-			anchors = new GMap<Integer, GList<Class<?>>>();
-			controllerSet = new GList<Controller>();
-			plugins = new GList<Class<?>>();
-			scanForAmps();
 			initializeAmps();
-		}
-
-		catch(IOException e)
-		{
-			e.printStackTrace();
 		}
 
 		catch(NoSuchMethodException e)
@@ -81,11 +175,6 @@ public class Main extends AmpedPlugin
 		}
 
 		catch(InvocationTargetException e)
-		{
-			e.printStackTrace();
-		}
-
-		catch(ClassNotFoundException e)
 		{
 			e.printStackTrace();
 		}
@@ -348,11 +437,17 @@ public class Main extends AmpedPlugin
 
 			pluginInstances.put(plugin, disableMethod);
 		}
+
+		for(Method i : tracks)
+		{
+			i.invoke(null, this);
+		}
 	}
 
-	private void scanForAmps() throws IOException, ClassNotFoundException
+	@Override
+	public void doScan() throws IOException, ClassNotFoundException
 	{
-		File jar = Surge.getPluginJarFile();
+		File jar = Surge.getPluginJarFileUnsafe(this);
 		FileInputStream fin = new FileInputStream(jar);
 		ZipInputStream zip = new ZipInputStream(fin);
 
@@ -367,29 +462,115 @@ public class Main extends AmpedPlugin
 
 				String c = entry.getName().replaceAll("/", ".").replace(".class", "");
 				Class<?> clazz = Class.forName(c);
-
-				if(clazz.isAnnotationPresent(Plugin.class))
-				{
-					plugins.add(clazz);
-					D.v("Found Plugin: " + clazz);
-				}
-
-				if(clazz.isAnnotationPresent(Anchor.class))
-				{
-					int s = clazz.getAnnotation(Anchor.class).value();
-
-					if(!anchors.containsKey(s))
-					{
-						anchors.put(s, new GList<Class<?>>());
-					}
-
-					anchors.get(s).add(clazz);
-					D.v("@Anchor(" + s + ") " + clazz.getSimpleName());
-				}
+				classes.add(clazz);
 			}
 		}
 
 		zip.close();
+
+		try
+		{
+			scanForRawEvents();
+			scanForDynamicTrack();
+		}
+
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		scanForPoolDefiners();
+	}
+
+	private void scanForPoolDefiners()
+	{
+		for(Class<?> i : classes)
+		{
+			if(i.isAnnotationPresent(PoolDescriber.class))
+			{
+				D.v("@PoolDescriber " + i.getSimpleName());
+
+				for(Field j : i.getDeclaredFields())
+				{
+					if(j.isAnnotationPresent(PoolNanoThrottle.class))
+					{
+						D.v("@PoolNanoThrottle " + j.getName());
+						nsField = j;
+					}
+
+					if(j.isAnnotationPresent(PoolCount.class))
+					{
+						D.v("@PoolCount " + j.getName());
+						thField = j;
+					}
+				}
+			}
+		}
+	}
+
+	private void scanForRawEvents() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	{
+		for(Class<?> i : classes)
+		{
+			if(i.isAnnotationPresent(DynamicConfiguration.class))
+			{
+				D.v("@DynamicConfiguration " + i.getSimpleName());
+
+				for(Method j : i.getDeclaredMethods())
+				{
+					if(j.isAnnotationPresent(RawEvent.class))
+					{
+						D.v("@RawEvent " + j.getName());
+						j.invoke(null, this);
+					}
+				}
+			}
+		}
+	}
+
+	private void scanForDynamicTrack() throws IllegalAccessException, IllegalArgumentException, InvocationTargetException
+	{
+		for(Class<?> i : classes)
+		{
+			if(i.isAnnotationPresent(DynamicConfiguration.class))
+			{
+				D.v("@DynamicConfiguration " + i.getSimpleName());
+
+				for(Method j : i.getDeclaredMethods())
+				{
+					if(j.isAnnotationPresent(DynamicTracker.class))
+					{
+						D.v("@DynamicTracker " + j.getName());
+						tracks.add(j);
+					}
+				}
+			}
+		}
+	}
+
+	private void scanForAmps() throws IOException, ClassNotFoundException
+	{
+		for(Class<?> clazz : classes)
+		{
+			if(clazz.isAnnotationPresent(Plugin.class))
+			{
+				plugins.add(clazz);
+				D.v("@Plugin " + clazz.getSimpleName());
+			}
+
+			if(clazz.isAnnotationPresent(Anchor.class))
+			{
+				int s = clazz.getAnnotation(Anchor.class).value();
+
+				if(!anchors.containsKey(s))
+				{
+					anchors.put(s, new GList<Class<?>>());
+				}
+
+				anchors.get(s).add(clazz);
+				D.v("@Anchor(" + s + ") " + clazz.getSimpleName());
+			}
+		}
 	}
 
 	@Override

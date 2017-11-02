@@ -1,5 +1,7 @@
 package surge.control;
 
+import java.io.IOException;
+
 import org.bukkit.plugin.java.JavaPlugin;
 
 import surge.Surge;
@@ -18,12 +20,37 @@ public abstract class AmpedPlugin extends JavaPlugin implements SurgePlugin, IMa
 
 	public AmpedPlugin()
 	{
+		try
+		{
+			doScan();
+		}
+
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return;
+		}
+
 		controllers = new GList<IController>();
-		pp = new ParallelPoolManager("Cruncher", 4, QueueMode.ROUND_ROBIN);
+		pp = new ParallelPoolManager("Cruncher", getThreadCount(), QueueMode.ROUND_ROBIN)
+		{
+			@Override
+			public long getNanoGate()
+			{
+				return getNanoSync();
+			}
+		};
+
 		ctt = new CoreTickThread();
 		onControllerRegistry();
 		onPreInit();
 	}
+
+	public abstract void doScan() throws IOException, ClassNotFoundException;
+
+	public abstract long getNanoSync();
+
+	public abstract int getThreadCount();
 
 	@Override
 	public void onLoad()

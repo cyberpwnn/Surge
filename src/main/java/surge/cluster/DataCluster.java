@@ -121,6 +121,11 @@ public class DataCluster
 
 	public long getLong(String k)
 	{
+		if(clusters.get(k).get() instanceof Integer)
+		{
+			return ((Integer) clusters.get(k).get()).longValue();
+		}
+
 		return (long) clusters.get(k).get();
 	}
 
@@ -153,32 +158,35 @@ public class DataCluster
 			set(k, (Integer) o);
 		}
 
-		if(o instanceof Boolean)
+		else if(o instanceof Boolean)
 		{
 			set(k, (Boolean) o);
 		}
 
-		if(o instanceof Double)
+		else if(o instanceof Double)
 		{
 			set(k, (Double) o);
 		}
 
-		if(o instanceof String)
+		else if(o instanceof String)
 		{
 			set(k, (String) o);
 		}
 
-		if(o instanceof Long)
+		else if(o instanceof Long)
 		{
 			set(k, (Long) o);
 		}
 
-		if(o instanceof List)
+		else if(o instanceof List)
 		{
 			set(k, (List<String>) o);
 		}
 
-		D.f("Failed to parse object type " + o.getClass().toString());
+		else
+		{
+			D.f("Failed to parse object type " + o.getClass().toString());
+		}
 	}
 
 	public void set(String k, int integer)
