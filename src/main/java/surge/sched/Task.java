@@ -14,7 +14,7 @@ public abstract class Task implements ITask, ICancellable
 	private boolean completed;
 	private Profiler profiler;
 	private Profiler activeProfiler;
-	private int ticks;
+	protected int ticks;
 
 	public Task(String name)
 	{

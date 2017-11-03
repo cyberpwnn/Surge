@@ -2,6 +2,8 @@ package surge.util;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 
 /**
  * Material blocks
@@ -36,8 +38,19 @@ public class MaterialBlock
 
 	public MaterialBlock(Location location)
 	{
-		material = location.getBlock().getType();
-		data = location.getBlock().getData();
+		this(location.getBlock());
+	}
+
+	public MaterialBlock(BlockState state)
+	{
+		material = state.getType();
+		data = state.getData().getData();
+	}
+
+	public MaterialBlock(Block block)
+	{
+		material = block.getType();
+		data = block.getData();
 	}
 
 	public MaterialBlock()
