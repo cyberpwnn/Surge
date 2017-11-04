@@ -7,13 +7,13 @@ In your pom.xml
 ``` xml
 <repository>
   <id>surge</id>
-  <url>https://raw.githubusercontent.com/cyberpwnn/Surge/master/repository/</url>
+  <url>https://raw.githubusercontent.com/cyberpwnn/Central/master/</url>
 </repository>
 
 <dependency>
-  <groupId>surge</groupId>
+  <groupId>org.cyberpwn</groupId>
   <artifactId>Surge</artifactId>
-  <version>1.5</version>
+  <version>1.7</version>
   <scope>provided</scope>
 </dependency>
 ```
@@ -78,7 +78,7 @@ In your build section:
                     <configuration>
 		        <artifactSet>
                             <includes>
-                                <include>surge:Surge</include>
+                                <include>org.cyberpwn:Surge</include>
                             </includes>
                         </artifactSet>
                     </configuration>
