@@ -173,7 +173,7 @@ public class NMSX
 
 		catch(Exception e)
 		{
-
+			e.printStackTrace();
 		}
 	}
 

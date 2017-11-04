@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>surge</groupId>
+	<groupId>org.cyberpwn</groupId>
 	<artifactId>Surge</artifactId>
 	<version>1.7</version>
 	<name>Surge</name>
@@ -10,7 +10,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<development.folder>C:\Users\cyberpwn\Documents\development\servers\dynamic\plugins</development.folder>
-		<github.maven.repository>file://C:\Users\cyberpwn\Documents\development\workspace\Surge\repository</github.maven.repository>
+		<github.maven.repository>file://C:\Users\cyberpwn\Documents\development\repository</github.maven.repository>
 	</properties>
 	<build>
 		<resources>
@@ -37,8 +37,8 @@
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
 		</repository>
 		<repository>
-			<id>surge</id>
-			<url>https://raw.githubusercontent.com/cyberpwnn/Surge/master/repository/</url>
+			<id>central</id>
+			<url>https://raw.githubusercontent.com/cyberpwnn/Central/master/</url>
 		</repository>
 	</repositories>
 	<dependencies>
@@ -51,7 +51,7 @@
 	</dependencies>
 	<distributionManagement>
 		<repository>
-			<id>surge</id>
+			<id>central</id>
 			<url>${github.maven.repository}</url>
 		</repository>
 	</distributionManagement>
