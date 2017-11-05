@@ -1,6 +1,6 @@
 package surge.util;
 
-import surge.math.M;
+import org.cyberpwn.gmath.M;
 
 /**
  * Timer

@@ -19,8 +19,7 @@ import org.bukkit.material.MaterialData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
-
-import surge.collection.GList;
+import org.cyberpwn.glang.GList;
 
 /**
  * World utils

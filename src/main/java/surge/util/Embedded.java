@@ -1,6 +1,6 @@
 package surge.util;
 
-import surge.collection.GList;
+import org.cyberpwn.glang.GList;
 
 /**
  * An embedded interface which can hold meta instances of itself, or only

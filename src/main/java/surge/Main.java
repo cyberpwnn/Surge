@@ -11,8 +11,9 @@ import java.lang.reflect.Modifier;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import surge.collection.GList;
-import surge.collection.GMap;
+import org.cyberpwn.glang.GList;
+import org.cyberpwn.glang.GMap;
+
 import surge.control.AmpedPlugin;
 import surge.control.Control;
 import surge.control.Controller;

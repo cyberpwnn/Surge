@@ -1,6 +1,6 @@
 package surge.server;
 
-import surge.math.M;
+import org.cyberpwn.gmath.M;
 
 public abstract class MemoryMonitor extends Thread
 {

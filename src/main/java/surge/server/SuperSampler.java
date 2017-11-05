@@ -2,8 +2,9 @@ package surge.server;
 
 import java.util.UUID;
 
+import org.cyberpwn.gmath.Average;
+
 import surge.Surge;
-import surge.math.Average;
 import surge.sched.IMasterTickComponent;
 
 public class SuperSampler implements IMasterTickComponent

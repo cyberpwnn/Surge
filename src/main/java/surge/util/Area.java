@@ -7,8 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-
-import surge.collection.GList;
+import org.cyberpwn.glang.GList;
 
 /**
  * Used to Create an instance of a spherical area based on a central location

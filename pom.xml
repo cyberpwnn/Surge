@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cyberpwn</groupId>
 	<artifactId>Surge</artifactId>
-	<version>1.7</version>
+	<version>1.8</version>
 	<name>Surge</name>
 	<description>A shade-able api for making bukkit plugins quickly</description>
 	<properties>
@@ -47,6 +47,16 @@
 			<artifactId>spigot-api</artifactId>
 			<version>1.12.2-R0.1-SNAPSHOT</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.cyberpwn</groupId>
+			<artifactId>JSON</artifactId>
+			<version>1.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.cyberpwn</groupId>
+			<artifactId>GConcurrent</artifactId>
+			<version>1.0</version>
 		</dependency>
 	</dependencies>
 	<distributionManagement>

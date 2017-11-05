@@ -23,9 +23,9 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredListener;
+import org.cyberpwn.glang.GList;
 
 import surge.Surge;
-import surge.collection.GList;
 
 /*
  * #%L

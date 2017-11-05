@@ -1,9 +1,9 @@
 package surge.util;
 
 import org.bukkit.Bukkit;
+import org.cyberpwn.glang.GList;
 
 import surge.Surge;
-import surge.collection.GList;
 
 public class D
 {

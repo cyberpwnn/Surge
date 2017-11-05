@@ -1,8 +1,8 @@
 package surge.util;
 
 import org.apache.commons.lang.WordUtils;
-
-import surge.collection.GList;
+import org.cyberpwn.gformat.F;
+import org.cyberpwn.glang.GList;
 
 /**
  * Textual Utilities

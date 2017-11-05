@@ -1,7 +1,7 @@
 package surge.sched;
 
-import surge.collection.GList;
-import surge.collection.GMap;
+import org.cyberpwn.glang.GList;
+import org.cyberpwn.glang.GMap;
 
 public class TaskManager implements IMasterTickComponent
 {

@@ -2,7 +2,8 @@ package surge.hotload;
 
 import java.io.File;
 
-import surge.collection.GMap;
+import org.cyberpwn.glang.GMap;
+
 import surge.sched.IMasterTickComponent;
 import surge.util.D;
 

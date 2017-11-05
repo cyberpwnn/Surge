@@ -1,8 +1,9 @@
 package surge.server;
 
+import org.cyberpwn.gbench.Profiler;
+import org.cyberpwn.gmath.M;
+
 import surge.Surge;
-import surge.math.M;
-import surge.math.Profiler;
 
 public abstract class TPSMonitor extends Thread
 {

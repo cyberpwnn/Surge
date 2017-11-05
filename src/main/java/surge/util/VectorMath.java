@@ -5,8 +5,9 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.Vector;
-
-import surge.collection.GList;
+import org.cyberpwn.gformat.F;
+import org.cyberpwn.glang.GList;
+import org.cyberpwn.glang.GListAdapter;
 
 /**
  * Vector utilities
@@ -19,12 +20,12 @@ public class VectorMath
 	{
 		switch(x)
 		{
-		case X:
-			return scaleX(v, amt);
-		case Y:
-			return scaleY(v, amt);
-		case Z:
-			return scaleZ(v, amt);
+			case X:
+				return scaleX(v, amt);
+			case Y:
+				return scaleY(v, amt);
+			case Z:
+				return scaleZ(v, amt);
 		}
 
 		return null;
@@ -150,85 +151,85 @@ public class VectorMath
 
 		switch(f)
 		{
-		case DOWN:
-			faces.add(BlockFace.DOWN);
-			break;
-		case EAST:
-			faces.add(BlockFace.EAST);
-			break;
-		case EAST_NORTH_EAST:
-			faces.add(BlockFace.EAST);
-			faces.add(BlockFace.EAST);
-			faces.add(BlockFace.NORTH);
-			break;
-		case EAST_SOUTH_EAST:
-			faces.add(BlockFace.EAST);
-			faces.add(BlockFace.EAST);
-			faces.add(BlockFace.SOUTH);
-			break;
-		case NORTH:
-			faces.add(BlockFace.NORTH);
-			break;
-		case NORTH_EAST:
-			faces.add(BlockFace.NORTH);
-			faces.add(BlockFace.EAST);
-			break;
-		case NORTH_NORTH_EAST:
-			faces.add(BlockFace.NORTH);
-			faces.add(BlockFace.NORTH);
-			faces.add(BlockFace.EAST);
-			break;
-		case NORTH_NORTH_WEST:
-			faces.add(BlockFace.NORTH);
-			faces.add(BlockFace.NORTH);
-			faces.add(BlockFace.WEST);
-			break;
-		case NORTH_WEST:
-			faces.add(BlockFace.NORTH);
-			faces.add(BlockFace.WEST);
-			break;
-		case SELF:
-			faces.add(BlockFace.SELF);
-			break;
-		case SOUTH:
-			faces.add(BlockFace.SOUTH);
-			break;
-		case SOUTH_EAST:
-			faces.add(BlockFace.SOUTH);
-			faces.add(BlockFace.EAST);
-			break;
-		case SOUTH_SOUTH_EAST:
-			faces.add(BlockFace.SOUTH);
-			faces.add(BlockFace.SOUTH);
-			faces.add(BlockFace.EAST);
-			break;
-		case SOUTH_SOUTH_WEST:
-			faces.add(BlockFace.SOUTH);
-			faces.add(BlockFace.SOUTH);
-			faces.add(BlockFace.WEST);
-			break;
-		case SOUTH_WEST:
-			faces.add(BlockFace.SOUTH);
-			faces.add(BlockFace.WEST);
-			break;
-		case UP:
-			faces.add(BlockFace.UP);
-			break;
-		case WEST:
-			faces.add(BlockFace.WEST);
-			break;
-		case WEST_NORTH_WEST:
-			faces.add(BlockFace.WEST);
-			faces.add(BlockFace.WEST);
-			faces.add(BlockFace.NORTH);
-			break;
-		case WEST_SOUTH_WEST:
-			faces.add(BlockFace.WEST);
-			faces.add(BlockFace.WEST);
-			faces.add(BlockFace.SOUTH);
-			break;
-		default:
-			break;
+			case DOWN:
+				faces.add(BlockFace.DOWN);
+				break;
+			case EAST:
+				faces.add(BlockFace.EAST);
+				break;
+			case EAST_NORTH_EAST:
+				faces.add(BlockFace.EAST);
+				faces.add(BlockFace.EAST);
+				faces.add(BlockFace.NORTH);
+				break;
+			case EAST_SOUTH_EAST:
+				faces.add(BlockFace.EAST);
+				faces.add(BlockFace.EAST);
+				faces.add(BlockFace.SOUTH);
+				break;
+			case NORTH:
+				faces.add(BlockFace.NORTH);
+				break;
+			case NORTH_EAST:
+				faces.add(BlockFace.NORTH);
+				faces.add(BlockFace.EAST);
+				break;
+			case NORTH_NORTH_EAST:
+				faces.add(BlockFace.NORTH);
+				faces.add(BlockFace.NORTH);
+				faces.add(BlockFace.EAST);
+				break;
+			case NORTH_NORTH_WEST:
+				faces.add(BlockFace.NORTH);
+				faces.add(BlockFace.NORTH);
+				faces.add(BlockFace.WEST);
+				break;
+			case NORTH_WEST:
+				faces.add(BlockFace.NORTH);
+				faces.add(BlockFace.WEST);
+				break;
+			case SELF:
+				faces.add(BlockFace.SELF);
+				break;
+			case SOUTH:
+				faces.add(BlockFace.SOUTH);
+				break;
+			case SOUTH_EAST:
+				faces.add(BlockFace.SOUTH);
+				faces.add(BlockFace.EAST);
+				break;
+			case SOUTH_SOUTH_EAST:
+				faces.add(BlockFace.SOUTH);
+				faces.add(BlockFace.SOUTH);
+				faces.add(BlockFace.EAST);
+				break;
+			case SOUTH_SOUTH_WEST:
+				faces.add(BlockFace.SOUTH);
+				faces.add(BlockFace.SOUTH);
+				faces.add(BlockFace.WEST);
+				break;
+			case SOUTH_WEST:
+				faces.add(BlockFace.SOUTH);
+				faces.add(BlockFace.WEST);
+				break;
+			case UP:
+				faces.add(BlockFace.UP);
+				break;
+			case WEST:
+				faces.add(BlockFace.WEST);
+				break;
+			case WEST_NORTH_WEST:
+				faces.add(BlockFace.WEST);
+				faces.add(BlockFace.WEST);
+				faces.add(BlockFace.NORTH);
+				break;
+			case WEST_SOUTH_WEST:
+				faces.add(BlockFace.WEST);
+				faces.add(BlockFace.WEST);
+				faces.add(BlockFace.SOUTH);
+				break;
+			default:
+				break;
 		}
 
 		return faces;

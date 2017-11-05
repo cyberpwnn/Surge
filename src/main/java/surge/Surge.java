@@ -6,8 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.Plugin;
+import org.cyberpwn.glang.GList;
 
-import surge.collection.GList;
 import surge.control.AmpedPlugin;
 import surge.hotload.HotloadManager;
 import surge.sched.IMasterTickComponent;

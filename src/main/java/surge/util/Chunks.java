@@ -2,8 +2,7 @@ package surge.util;
 
 import org.bukkit.Chunk;
 import org.bukkit.World;
-
-import surge.collection.GList;
+import org.cyberpwn.glang.GList;
 
 /**
  * Chunk utils

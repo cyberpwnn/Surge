@@ -1,7 +1,8 @@
 package surge.control;
 
-import surge.collection.GList;
-import surge.pool.ParallelPoolManager;
+import org.cyberpwn.gconcurrent.ParallelPoolManager;
+import org.cyberpwn.glang.GList;
+
 import surge.util.Protocol;
 
 public interface SurgePlugin

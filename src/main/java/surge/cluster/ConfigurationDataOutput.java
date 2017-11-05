@@ -5,7 +5,8 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
 
-import surge.collection.GMap;
+import org.cyberpwn.glang.GMap;
+
 import surge.util.D;
 
 public class ConfigurationDataOutput

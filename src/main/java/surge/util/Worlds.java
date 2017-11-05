@@ -2,8 +2,7 @@ package surge.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.World;
-
-import surge.collection.GList;
+import org.cyberpwn.glang.GList;
 
 /**
  * World utils

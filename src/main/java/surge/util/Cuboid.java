@@ -16,8 +16,8 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.material.MaterialData;
-
-import surge.collection.GList;
+import org.cyberpwn.glang.GList;
+import org.cyberpwn.glang.GListAdapter;
 
 /**
  * Cuboids
@@ -59,12 +59,12 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
 	{
 		switch(a)
 		{
-		case X:
-			return x2 - x1;
-		case Y:
-			return y2 - y1;
-		case Z:
-			return z2 - z1;
+			case X:
+				return x2 - x1;
+			case Y:
+				return y2 - y1;
+			case Z:
+				return z2 - z1;
 		}
 
 		return -1;
@@ -453,20 +453,20 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
 	{
 		switch(dir)
 		{
-		case West:
-			return new Cuboid(worldName, x1 - amount, y1, z1, x2, y2, z2);
-		case East:
-			return new Cuboid(worldName, x1, y1, z1, x2 + amount, y2, z2);
-		case North:
-			return new Cuboid(worldName, x1, y1, z1 - amount, x2, y2, z2);
-		case South:
-			return new Cuboid(worldName, x1, y1, z1, x2, y2, z2 + amount);
-		case Down:
-			return new Cuboid(worldName, x1, y1 - amount, z1, x2, y2, z2);
-		case Up:
-			return new Cuboid(worldName, x1, y1, z1, x2, y2 + amount, z2);
-		default:
-			throw new IllegalArgumentException("invalid direction " + dir);
+			case West:
+				return new Cuboid(worldName, x1 - amount, y1, z1, x2, y2, z2);
+			case East:
+				return new Cuboid(worldName, x1, y1, z1, x2 + amount, y2, z2);
+			case North:
+				return new Cuboid(worldName, x1, y1, z1 - amount, x2, y2, z2);
+			case South:
+				return new Cuboid(worldName, x1, y1, z1, x2, y2, z2 + amount);
+			case Down:
+				return new Cuboid(worldName, x1, y1 - amount, z1, x2, y2, z2);
+			case Up:
+				return new Cuboid(worldName, x1, y1, z1, x2, y2 + amount, z2);
+			default:
+				throw new IllegalArgumentException("invalid direction " + dir);
 		}
 	}
 
@@ -499,17 +499,17 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
 		Cuboid c;
 		switch(dir)
 		{
-		case Horizontal:
-			c = expand(CuboidDirection.North, amount).expand(CuboidDirection.South, amount).expand(CuboidDirection.East, amount).expand(CuboidDirection.West, amount);
-			break;
-		case Vertical:
-			c = expand(CuboidDirection.Down, amount).expand(CuboidDirection.Up, amount);
-			break;
-		case Both:
-			c = outset(CuboidDirection.Horizontal, amount).outset(CuboidDirection.Vertical, amount);
-			break;
-		default:
-			throw new IllegalArgumentException("invalid direction " + dir);
+			case Horizontal:
+				c = expand(CuboidDirection.North, amount).expand(CuboidDirection.South, amount).expand(CuboidDirection.East, amount).expand(CuboidDirection.West, amount);
+				break;
+			case Vertical:
+				c = expand(CuboidDirection.Down, amount).expand(CuboidDirection.Up, amount);
+				break;
+			case Both:
+				c = outset(CuboidDirection.Horizontal, amount).outset(CuboidDirection.Vertical, amount);
+				break;
+			default:
+				throw new IllegalArgumentException("invalid direction " + dir);
 		}
 		return c;
 	}
@@ -626,44 +626,44 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
 		Cuboid face = getFace(dir.opposite());
 		switch(dir)
 		{
-		case Down:
-			while(face.containsOnly(Material.AIR) && face.getLowerY() > getLowerY())
-			{
-				face = face.shift(CuboidDirection.Down, 1);
-			}
-			return new Cuboid(worldName, x1, y1, z1, x2, face.getUpperY(), z2);
-		case Up:
-			while(face.containsOnly(Material.AIR) && face.getUpperY() < getUpperY())
-			{
-				face = face.shift(CuboidDirection.Up, 1);
-			}
-			return new Cuboid(worldName, x1, face.getLowerY(), z1, x2, y2, z2);
-		case North:
-			while(face.containsOnly(Material.AIR) && face.getLowerX() > getLowerX())
-			{
-				face = face.shift(CuboidDirection.North, 1);
-			}
-			return new Cuboid(worldName, x1, y1, z1, face.getUpperX(), y2, z2);
-		case South:
-			while(face.containsOnly(Material.AIR) && face.getUpperX() < getUpperX())
-			{
-				face = face.shift(CuboidDirection.South, 1);
-			}
-			return new Cuboid(worldName, face.getLowerX(), y1, z1, x2, y2, z2);
-		case East:
-			while(face.containsOnly(Material.AIR) && face.getLowerZ() > getLowerZ())
-			{
-				face = face.shift(CuboidDirection.East, 1);
-			}
-			return new Cuboid(worldName, x1, y1, z1, x2, y2, face.getUpperZ());
-		case West:
-			while(face.containsOnly(Material.AIR) && face.getUpperZ() < getUpperZ())
-			{
-				face = face.shift(CuboidDirection.West, 1);
-			}
-			return new Cuboid(worldName, x1, y1, face.getLowerZ(), x2, y2, z2);
-		default:
-			throw new IllegalArgumentException("Invalid direction " + dir);
+			case Down:
+				while(face.containsOnly(Material.AIR) && face.getLowerY() > getLowerY())
+				{
+					face = face.shift(CuboidDirection.Down, 1);
+				}
+				return new Cuboid(worldName, x1, y1, z1, x2, face.getUpperY(), z2);
+			case Up:
+				while(face.containsOnly(Material.AIR) && face.getUpperY() < getUpperY())
+				{
+					face = face.shift(CuboidDirection.Up, 1);
+				}
+				return new Cuboid(worldName, x1, face.getLowerY(), z1, x2, y2, z2);
+			case North:
+				while(face.containsOnly(Material.AIR) && face.getLowerX() > getLowerX())
+				{
+					face = face.shift(CuboidDirection.North, 1);
+				}
+				return new Cuboid(worldName, x1, y1, z1, face.getUpperX(), y2, z2);
+			case South:
+				while(face.containsOnly(Material.AIR) && face.getUpperX() < getUpperX())
+				{
+					face = face.shift(CuboidDirection.South, 1);
+				}
+				return new Cuboid(worldName, face.getLowerX(), y1, z1, x2, y2, z2);
+			case East:
+				while(face.containsOnly(Material.AIR) && face.getLowerZ() > getLowerZ())
+				{
+					face = face.shift(CuboidDirection.East, 1);
+				}
+				return new Cuboid(worldName, x1, y1, z1, x2, y2, face.getUpperZ());
+			case West:
+				while(face.containsOnly(Material.AIR) && face.getUpperZ() < getUpperZ())
+				{
+					face = face.shift(CuboidDirection.West, 1);
+				}
+				return new Cuboid(worldName, x1, y1, face.getLowerZ(), x2, y2, z2);
+			default:
+				throw new IllegalArgumentException("Invalid direction " + dir);
 		}
 	}
 
@@ -679,20 +679,20 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
 	{
 		switch(dir)
 		{
-		case Down:
-			return new Cuboid(worldName, x1, y1, z1, x2, y1, z2);
-		case Up:
-			return new Cuboid(worldName, x1, y2, z1, x2, y2, z2);
-		case North:
-			return new Cuboid(worldName, x1, y1, z1, x2, y2, z1);
-		case South:
-			return new Cuboid(worldName, x1, y1, z2, x2, y2, z2);
-		case East:
-			return new Cuboid(worldName, x2, y1, z1, x2, y2, z2);
-		case West:
-			return new Cuboid(worldName, x1, y1, z1, x1, y2, z2);
-		default:
-			throw new IllegalArgumentException("Invalid direction " + dir);
+			case Down:
+				return new Cuboid(worldName, x1, y1, z1, x2, y1, z2);
+			case Up:
+				return new Cuboid(worldName, x1, y2, z1, x2, y2, z2);
+			case North:
+				return new Cuboid(worldName, x1, y1, z1, x2, y2, z1);
+			case South:
+				return new Cuboid(worldName, x1, y1, z2, x2, y2, z2);
+			case East:
+				return new Cuboid(worldName, x2, y1, z1, x2, y2, z2);
+			case West:
+				return new Cuboid(worldName, x1, y1, z1, x1, y2, z2);
+			default:
+				throw new IllegalArgumentException("Invalid direction " + dir);
 		}
 	}
 
@@ -931,26 +931,26 @@ public class Cuboid implements Iterable<Block>, Cloneable, ConfigurationSerializ
 		{
 			switch(this)
 			{
-			case North:
-				return South;
-			case East:
-				return West;
-			case South:
-				return North;
-			case West:
-				return East;
-			case Horizontal:
-				return Vertical;
-			case Vertical:
-				return Horizontal;
-			case Up:
-				return Down;
-			case Down:
-				return Up;
-			case Both:
-				return Both;
-			default:
-				return Unknown;
+				case North:
+					return South;
+				case East:
+					return West;
+				case South:
+					return North;
+				case West:
+					return East;
+				case Horizontal:
+					return Vertical;
+				case Vertical:
+					return Horizontal;
+				case Up:
+					return Down;
+				case Down:
+					return Up;
+				case Both:
+					return Both;
+				default:
+					return Unknown;
 			}
 		}
 	}

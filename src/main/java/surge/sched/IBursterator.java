@@ -2,7 +2,7 @@ package surge.sched;
 
 import java.util.List;
 
-import surge.math.Profiler;
+import org.cyberpwn.gbench.Profiler;
 
 public interface IBursterator<T>
 {

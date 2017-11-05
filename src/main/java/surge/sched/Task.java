@@ -1,7 +1,8 @@
 package surge.sched;
 
+import org.cyberpwn.gbench.Profiler;
+
 import surge.Surge;
-import surge.math.Profiler;
 
 public abstract class Task implements ITask, ICancellable
 {

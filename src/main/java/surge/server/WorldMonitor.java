@@ -15,9 +15,9 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
+import org.cyberpwn.gmath.M;
 
 import surge.Surge;
-import surge.math.M;
 
 @SuppressWarnings("deprecation")
 public abstract class WorldMonitor extends Thread implements Listener

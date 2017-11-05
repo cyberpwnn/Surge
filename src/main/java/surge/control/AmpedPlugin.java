@@ -3,11 +3,13 @@ package surge.control;
 import java.io.IOException;
 
 import org.bukkit.plugin.java.JavaPlugin;
+import org.cyberpwn.gconcurrent.A;
+import org.cyberpwn.gconcurrent.ParallelPoolManager;
+import org.cyberpwn.gconcurrent.QueueMode;
+import org.cyberpwn.gconcurrent.S;
+import org.cyberpwn.glang.GList;
 
 import surge.Surge;
-import surge.collection.GList;
-import surge.pool.ParallelPoolManager;
-import surge.pool.QueueMode;
 import surge.sched.IMasterTickComponent;
 import surge.server.CoreTickThread;
 import surge.util.Protocol;
@@ -57,6 +59,8 @@ public abstract class AmpedPlugin extends JavaPlugin implements SurgePlugin, IMa
 	{
 		onPostInit();
 		pp.start();
+		A.mgr = pp;
+		S.mgr = pp;
 		ctt.start();
 	}
 

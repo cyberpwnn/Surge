@@ -5,7 +5,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import surge.json.JSONObject;
+import org.cyberpwn.json.JSONObject;
 
 /**
  * Paste to the web

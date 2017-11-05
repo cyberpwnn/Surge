@@ -14,8 +14,8 @@ import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.util.Vector;
-
-import surge.collection.GList;
+import org.cyberpwn.glang.GList;
+import org.cyberpwn.glang.GListAdapter;
 
 /**
  * Player utils

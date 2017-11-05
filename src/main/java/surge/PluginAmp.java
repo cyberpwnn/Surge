@@ -1,10 +1,10 @@
 package surge;
 
 import org.bukkit.Bukkit;
+import org.cyberpwn.gconcurrent.TICK;
 
 import surge.control.AmpedPlugin;
 import surge.sched.IMasterTickComponent;
-import surge.sched.TICK;
 import surge.util.D;
 import surge.util.PluginUtil;
 

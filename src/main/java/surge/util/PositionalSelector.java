@@ -2,8 +2,7 @@ package surge.util;
 
 import org.bukkit.Chunk;
 import org.bukkit.World;
-
-import surge.collection.GSet;
+import org.cyberpwn.glang.GSet;
 
 public class PositionalSelector
 {
