@@ -78,7 +78,7 @@ In your build section:
                     <configuration>
 		        <artifactSet>
                             <includes>
-                                <include>org.cyberpwn:Surge</include>
+                                <include>org.cyberpwn:*</include>
                             </includes>
                         </artifactSet>
                     </configuration>
