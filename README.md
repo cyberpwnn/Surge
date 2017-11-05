@@ -76,9 +76,10 @@ In your build section:
                         <goal>shade</goal>
                     </goals>
                     <configuration>
+		        <minimizeJar>true</minimizeJar>
 		        <artifactSet>
                             <includes>
-                                <include>org.cyberpwn:Surge</include>
+                                <include>org.cyberpwn:*</include>
                             </includes>
                         </artifactSet>
                     </configuration>
