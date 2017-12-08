@@ -34,7 +34,7 @@ public class Chunks
 
 		for(World i : Worlds.getWorlds())
 		{
-			chunks.add(getLoadedChunks(i));
+			chunks.addAll(getLoadedChunks(i));
 		}
 
 		return chunks;

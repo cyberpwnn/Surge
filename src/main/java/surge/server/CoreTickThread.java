@@ -6,6 +6,8 @@ import surge.util.D;
 
 public class CoreTickThread extends Thread
 {
+	public boolean r = true;
+
 	public CoreTickThread()
 	{
 		setName("Surge Sideline");
@@ -18,6 +20,11 @@ public class CoreTickThread extends Thread
 
 		while(!interrupted())
 		{
+			if(!r)
+			{
+				break;
+			}
+
 			try
 			{
 				Thread.sleep(50);
@@ -30,7 +37,7 @@ public class CoreTickThread extends Thread
 
 			catch(Throwable e)
 			{
-				e.printStackTrace();
+
 			}
 		}
 	}

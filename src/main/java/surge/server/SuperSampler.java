@@ -2,7 +2,10 @@ package surge.server;
 
 import java.util.UUID;
 
+import org.cyberpwn.glang.GList;
+import org.cyberpwn.glang.GMap;
 import org.cyberpwn.gmath.Average;
+import org.cyberpwn.gmath.M;
 
 import surge.Surge;
 import surge.sched.IMasterTickComponent;
@@ -17,6 +20,7 @@ public class SuperSampler implements IMasterTickComponent
 	private double tickTime;
 	private double tickTimeRaw;
 	private boolean running;
+	private boolean frozen;
 	private double tickUtilizationRaw;
 	private double tickUtilization;
 	private double leftoverTickTime;
@@ -34,9 +38,13 @@ public class SuperSampler implements IMasterTickComponent
 	private WorldMonitor worldMonitor;
 	private TPSMonitor tpsMonitor;
 	private MemoryMonitor memoryMonitor;
+	private StackTraceElement[] lockStack;
+	private GMap<Long, GList<StackTraceElement>> spikes;
 
 	public SuperSampler()
 	{
+		frozen = false;
+		lockStack = null;
 		running = false;
 		ticksPerSecondL = new Average(6);
 		mahL = new Average(20);
@@ -58,6 +66,7 @@ public class SuperSampler implements IMasterTickComponent
 		chunksLoaded = 0;
 		chunksUnloaded = 0;
 		mahs = 0;
+		spikes = new GMap<Long, GList<StackTraceElement>>();
 
 		worldMonitor = new WorldMonitor()
 		{
@@ -88,6 +97,13 @@ public class SuperSampler implements IMasterTickComponent
 				tickUtilizationRaw = tickTimeRaw / 50.0;
 				tickUtilization = tickTime / 50.0;
 				leftoverTickTime = 50 - tickUtilization < 0 ? 0 : 50 - tickUtilization;
+				frozen = isFrozen();
+			}
+
+			@Override
+			public void onSpike()
+			{
+				spikes.put(M.ms(), new GList<StackTraceElement>(getLockedStack()));
 			}
 		};
 
@@ -386,5 +402,20 @@ public class SuperSampler implements IMasterTickComponent
 	public void setMemoryMonitor(MemoryMonitor memoryMonitor)
 	{
 		this.memoryMonitor = memoryMonitor;
+	}
+
+	public boolean isFrozen()
+	{
+		return frozen;
+	}
+
+	public StackTraceElement[] getLockStack()
+	{
+		return lockStack;
+	}
+
+	public GMap<Long, GList<StackTraceElement>> getSpikes()
+	{
+		return spikes;
 	}
 }

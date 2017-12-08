@@ -87,7 +87,7 @@ public abstract class MemoryMonitor extends Thread
 
 			catch(InterruptedException e)
 			{
-				e.printStackTrace();
+
 			}
 		}
 	}

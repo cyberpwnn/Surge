@@ -23,7 +23,7 @@ public class ProtocolRange
 
 	public boolean contains(Protocol p)
 	{
-		return p.getMetaVersion() >= from.getMetaVersion() && p.getMetaVersion() <= to.getMetaVersion();
+		return p.getCVersion() >= from.getCVersion() && p.getCVersion() <= to.getCVersion();
 	}
 
 	@Override

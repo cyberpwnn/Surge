@@ -180,13 +180,18 @@ public class Area
 			{
 				for(int chZ = 0 - chunkRadius; chZ <= chunkRadius; chZ++)
 				{
-					int x = (int) location.getX(), y = (int) location.getY(), z = (int) location.getZ();
+					int x = (int) location.getX();
+					int y = (int) location.getY();
+					int z = (int) location.getZ();
 
-					for(Entity e : new Location(location.getWorld(), x + (chX * 16), y, z + (chZ * 16)).getChunk().getEntities())
+					if(location.getWorld().isChunkLoaded((x + (chX * 16)) >> 4, (z + (chZ * 16)) >> 4))
 					{
-						if(e.getLocation().distanceSquared(location) <= radius * radius && e.getLocation().getBlock() != location.getBlock())
+						for(Entity e : new Location(location.getWorld(), x + (chX * 16), y, z + (chZ * 16)).getChunk().getEntities())
 						{
-							radiusEntities.add(e);
+							if(e.getLocation().distanceSquared(location) <= radius * radius && e.getLocation().getBlock() != location.getBlock())
+							{
+								radiusEntities.add(e);
+							}
 						}
 					}
 				}

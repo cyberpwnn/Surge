@@ -14,6 +14,11 @@ public class TaskManager implements IMasterTickComponent
 		taskProfiles = new GMap<String, TaskProfile>();
 	}
 
+	public void add(ITask i)
+	{
+		tasks.add(i);
+	}
+
 	@Override
 	public void onTick()
 	{
@@ -51,5 +56,15 @@ public class TaskManager implements IMasterTickComponent
 	public String getTickName()
 	{
 		return "taskmgr";
+	}
+
+	public GList<ITask> getTasks()
+	{
+		return tasks;
+	}
+
+	public GMap<String, TaskProfile> getTaskProfiles()
+	{
+		return taskProfiles;
 	}
 }

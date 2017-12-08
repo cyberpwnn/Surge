@@ -2,6 +2,8 @@ package surge.hotload;
 
 import java.io.File;
 
+import org.cyberpwn.gconcurrent.A;
+import org.cyberpwn.gconcurrent.TICK;
 import org.cyberpwn.glang.GMap;
 
 import surge.sched.IMasterTickComponent;
@@ -45,30 +47,42 @@ public class HotloadManager implements IMasterTickComponent
 	@Override
 	public void onTick()
 	{
-		for(File i : filemods.k())
+		if(A.mgr == null || TICK.tick % 20 == 0)
 		{
-			try
-			{
-				if(i.exists() && (i.lastModified() != filemods.get(i) || i.length() != filesizes.get(i)))
-				{
-					D.v(i.getName() + " modified");
-					fileacts.get(i).run();
-					filemods.put(i, i.lastModified());
-					filesizes.put(i, i.length());
-				}
-
-				if(!i.exists() || i.isDirectory())
-				{
-					D.v(i.getName() + " deleted, untracking.");
-					untrack(i);
-				}
-			}
-
-			catch(Exception e)
-			{
-
-			}
+			return;
 		}
+
+		new A()
+		{
+			@Override
+			public void run()
+			{
+				for(File i : filemods.k())
+				{
+					try
+					{
+						if(i.exists() && (i.lastModified() != filemods.get(i) || i.length() != filesizes.get(i)))
+						{
+							D.v(i.getName() + " modified");
+							fileacts.get(i).run();
+							filemods.put(i, i.lastModified());
+							filesizes.put(i, i.length());
+						}
+
+						if(!i.exists() || i.isDirectory())
+						{
+							D.v(i.getName() + " deleted, untracking.");
+							untrack(i);
+						}
+					}
+
+					catch(Exception e)
+					{
+
+					}
+				}
+			}
+		};
 	}
 
 	@Override

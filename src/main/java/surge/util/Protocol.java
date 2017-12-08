@@ -185,6 +185,16 @@ public enum Protocol
 		return getMetaVersion();
 	}
 
+	public int getCVersion()
+	{
+		if(isActualVersion() && !isNettySupported())
+		{
+			return getMetaVersion();
+		}
+
+		return getMetaVersion() + 1000;
+	}
+
 	public int getMetaVersion()
 	{
 		return version;
