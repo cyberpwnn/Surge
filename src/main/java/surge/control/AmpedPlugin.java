@@ -82,13 +82,7 @@ public abstract class AmpedPlugin extends JavaPlugin implements SurgePlugin, IMa
 	@Override
 	public void onDisable()
 	{
-		for(IController i : getControllers())
-		{
-			i.stop();
-		}
-
 		onStop();
-
 		pp.shutdown();
 		ctt.interrupt();
 		ctt.r = false;

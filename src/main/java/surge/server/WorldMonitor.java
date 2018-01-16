@@ -9,7 +9,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -58,6 +57,11 @@ public abstract class WorldMonitor extends Thread implements Listener
 			{
 
 			}
+
+			if(interrupted())
+			{
+				return;
+			}
 		}
 
 		Surge.unregister(this);
@@ -105,12 +109,6 @@ public abstract class WorldMonitor extends Thread implements Listener
 
 	@EventHandler
 	public void on(PlayerPickupItemEvent e)
-	{
-		dropChanged = true;
-	}
-
-	@EventHandler
-	public void on(EntityPickupItemEvent e)
 	{
 		dropChanged = true;
 	}
@@ -213,9 +211,28 @@ public abstract class WorldMonitor extends Thread implements Listener
 
 		for(World i : Bukkit.getWorlds())
 		{
-			for(Chunk j : i.getLoadedChunks())
+			try
 			{
-				totalTiles += j.getTileEntities().length;
+				for(Chunk j : i.getLoadedChunks())
+				{
+					if(j.isLoaded())
+					{
+						try
+						{
+							totalTiles += j.getTileEntities().length;
+						}
+
+						catch(Exception e)
+						{
+
+						}
+					}
+				}
+			}
+
+			catch(Exception e)
+			{
+
 			}
 		}
 	}

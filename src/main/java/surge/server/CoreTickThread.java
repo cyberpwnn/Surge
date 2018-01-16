@@ -25,14 +25,34 @@ public class CoreTickThread extends Thread
 				break;
 			}
 
+			if(Thread.interrupted())
+			{
+				return;
+			}
+
 			try
 			{
+				if(Thread.interrupted())
+				{
+					return;
+				}
+
 				Thread.sleep(50);
 
 				for(IMasterTickComponent i : Surge.getAsyncTickComponents())
 				{
+					if(Thread.interrupted())
+					{
+						return;
+					}
+
 					i.onTick();
 				}
+			}
+
+			catch(InterruptedException e)
+			{
+				return;
 			}
 
 			catch(Throwable e)

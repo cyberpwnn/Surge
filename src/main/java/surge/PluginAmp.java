@@ -13,11 +13,21 @@ public class PluginAmp
 	private AmpedPlugin plugin;
 	private boolean connected;
 	private int masterTask;
+	public Runnable onReload;
 
 	public PluginAmp(AmpedPlugin plugin)
 	{
 		this.plugin = plugin;
 		connected = false;
+
+		onReload = new Runnable()
+		{
+			@Override
+			public void run()
+			{
+
+			}
+		};
 	}
 
 	public AmpedPlugin getPluginInstance()
@@ -39,7 +49,7 @@ public class PluginAmp
 			@Override
 			public void run()
 			{
-				D.v("Reinjecting... ");
+				onReload.run();
 				PluginUtil.reload(getPluginInstance());
 			}
 		});
@@ -111,5 +121,40 @@ public class PluginAmp
 	public void stopTask(int id)
 	{
 		Bukkit.getScheduler().cancelTask(id);
+	}
+
+	public AmpedPlugin getPlugin()
+	{
+		return plugin;
+	}
+
+	public int getMasterTask()
+	{
+		return masterTask;
+	}
+
+	public Runnable getOnReload()
+	{
+		return onReload;
+	}
+
+	public void setPlugin(AmpedPlugin plugin)
+	{
+		this.plugin = plugin;
+	}
+
+	public void setConnected(boolean connected)
+	{
+		this.connected = connected;
+	}
+
+	public void setMasterTask(int masterTask)
+	{
+		this.masterTask = masterTask;
+	}
+
+	public void setOnReload(Runnable onReload)
+	{
+		this.onReload = onReload;
 	}
 }

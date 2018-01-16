@@ -39,7 +39,7 @@ public class Main extends AmpedPlugin
 	private GMap<Object, Method> pluginInstances;
 	private GList<Controller> controllerSet;
 	public static GMap<Integer, GList<Class<?>>> anchors;
-	private static final GList<Class<?>> classes = new GList<Class<?>>();
+	public static final GList<Class<?>> classes = new GList<Class<?>>();
 	private static Field nsField = null;
 	private static Field thField = null;
 	private static final GList<Method> tracks = new GList<Method>();
@@ -115,6 +115,18 @@ public class Main extends AmpedPlugin
 	}
 
 	public static void requestReload()
+	{
+		requestReload(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+
+			}
+		});
+	}
+
+	public static void requestReload(Runnable done)
 	{
 		String name = Surge.getAmp().getPluginInstance().getName();
 		PluginUtil.unload(Surge.getAmp().getPluginInstance());
@@ -461,9 +473,17 @@ public class Main extends AmpedPlugin
 					continue;
 				}
 
-				String c = entry.getName().replaceAll("/", ".").replace(".class", "");
-				Class<?> clazz = Class.forName(c);
-				classes.add(clazz);
+				try
+				{
+					String c = entry.getName().replaceAll("/", ".").replace(".class", "");
+					Class<?> clazz = Class.forName(c);
+					classes.add(clazz);
+				}
+
+				catch(Throwable e)
+				{
+
+				}
 			}
 		}
 

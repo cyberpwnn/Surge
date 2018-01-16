@@ -45,6 +45,11 @@ public abstract class MemoryMonitor extends Thread
 	{
 		while(!interrupted())
 		{
+			if(interrupted())
+			{
+				return;
+			}
+
 			memoryMax = Runtime.getRuntime().maxMemory();
 			memoryFree = Runtime.getRuntime().freeMemory() + (memoryMax - Runtime.getRuntime().totalMemory());
 			memoryUsed = memoryMax - memoryFree;

@@ -18,9 +18,11 @@ public abstract class TPSMonitor extends Thread
 	private long lastTick;
 	private boolean frozen;
 	private StackTraceElement[] lockedStack;
+	private double lmsx;
 
 	public TPSMonitor()
 	{
+		lmsx = 0;
 		setName("Surge Tick Monitor");
 		tickProfiler = new Profiler();
 		tickProfiler.begin();
@@ -46,6 +48,11 @@ public abstract class TPSMonitor extends Thread
 	{
 		while(!interrupted())
 		{
+			if(interrupted())
+			{
+				return;
+			}
+
 			if(Surge.getServerThread() != null)
 			{
 				processState(Surge.getServerThread().getState());
@@ -56,11 +63,17 @@ public abstract class TPSMonitor extends Thread
 
 			}
 
+			if(interrupted())
+			{
+				return;
+			}
+
 			if(ticked)
 			{
 				tickProfiler.end();
 				tickTimeMS = tickProfiler.getMilliseconds();
-				rawTicksPerSecond = M.clip(1000.0 / tickTimeMS, 0, 20);
+				rawTicksPerSecond = M.clip(1000.0 / ((double) (lmsx + tickTimeMS) / 2.0), 0, 20);
+				lmsx = tickTimeMS;
 				tickProfiler.reset();
 				tickProfiler.begin();
 				ticked = false;
@@ -82,8 +95,16 @@ public abstract class TPSMonitor extends Thread
 
 				if(wasntFrozen)
 				{
-					lockedStack = lockedStack == null ? Surge.getServerThread().getStackTrace() : lockedStack;
-					onSpike();
+					try
+					{
+						lockedStack = lockedStack == null ? Surge.getServerThread().getStackTrace() : lockedStack;
+						onSpike();
+					}
+
+					catch(Exception e)
+					{
+
+					}
 				}
 
 				onTicked();

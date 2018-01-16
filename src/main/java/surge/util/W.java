@@ -651,7 +651,10 @@ public class W
 		{
 			for(int j = c.getZ() - rad + 1; j < c.getZ() + rad; j++)
 			{
-				cx.add(c.getWorld().getChunkAt(i, j));
+				if(c.getWorld().isChunkLoaded(i, j))
+				{
+					cx.add(c.getWorld().getChunkAt(i, j));
+				}
 			}
 		}
 
