@@ -179,7 +179,7 @@ public class P
 	 */
 	public static Entity targetEntity(Player p, int distance)
 	{
-		return getEntityLookingAt(p, distance, 1);
+		return getEntityLookingAt(p, distance, 0.15);
 	}
 
 	/**

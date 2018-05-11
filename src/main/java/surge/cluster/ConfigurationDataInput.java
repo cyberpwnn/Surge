@@ -3,7 +3,7 @@ package surge.cluster;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.List;
+import java.util.ArrayList;
 
 import org.cyberpwn.glang.GMap;
 
@@ -59,7 +59,7 @@ public class ConfigurationDataInput
 					i.set(c, (String) raw);
 					break;
 				case STRING_LIST:
-					i.set(c, (List<String>) raw);
+					i.set(c, (ArrayList<String>) raw);
 					break;
 			}
 		}
@@ -119,7 +119,7 @@ public class ConfigurationDataInput
 						i.set(c, (String) raw);
 						break;
 					case STRING_LIST:
-						i.set(c, (List<String>) raw);
+						i.set(c, (ArrayList<String>) raw);
 						break;
 				}
 			}
@@ -169,9 +169,9 @@ public class ConfigurationDataInput
 				cc.set(key, (Long) val);
 			}
 
-			else if(val instanceof List)
+			else if(val instanceof ArrayList)
 			{
-				cc.set(key, (List<String>) val);
+				cc.set(key, (ArrayList<String>) val);
 			}
 
 			else
@@ -242,9 +242,9 @@ public class ConfigurationDataInput
 					cc.set(skey, (Long) val);
 				}
 
-				else if(val instanceof List)
+				else if(val instanceof ArrayList)
 				{
-					cc.set(skey, (List<String>) val);
+					cc.set(skey, (ArrayList<String>) val);
 				}
 
 				else

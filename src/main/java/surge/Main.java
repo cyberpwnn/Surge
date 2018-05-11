@@ -47,35 +47,7 @@ public class Main extends AmpedPlugin
 
 	public Main()
 	{
-		super();
 
-		try
-		{
-			anchors = new GMap<Integer, GList<Class<?>>>();
-			controllerSet = new GList<Controller>();
-			plugins = new GList<Class<?>>();
-			scanForAmps();
-		}
-
-		catch(IOException e)
-		{
-			e.printStackTrace();
-		}
-
-		catch(SecurityException e)
-		{
-			e.printStackTrace();
-		}
-
-		catch(IllegalArgumentException e)
-		{
-			e.printStackTrace();
-		}
-
-		catch(ClassNotFoundException e)
-		{
-			e.printStackTrace();
-		}
 	}
 
 	@Override
@@ -116,21 +88,31 @@ public class Main extends AmpedPlugin
 
 	public static void requestReload()
 	{
-		requestReload(new Runnable()
+		try
 		{
-			@Override
-			public void run()
-			{
+			AmpedPlugin p = Surge.getAmp().getPluginInstance();
+			PluginUtil.reload(p);
+		}
 
-			}
-		});
+		catch(Throwable e)
+		{
+
+		}
 	}
 
-	public static void requestReload(Runnable done)
+	public static void requestReload(Runnable r)
 	{
-		String name = Surge.getAmp().getPluginInstance().getName();
-		PluginUtil.unload(Surge.getAmp().getPluginInstance());
-		PluginUtil.load(name);
+		try
+		{
+			AmpedPlugin p = Surge.getAmp().getPluginInstance();
+			PluginUtil.reload(p);
+			r.run();
+		}
+
+		catch(Throwable e)
+		{
+
+		}
 	}
 
 	@Override
@@ -159,6 +141,34 @@ public class Main extends AmpedPlugin
 	{
 		try
 		{
+			try
+			{
+				anchors = new GMap<Integer, GList<Class<?>>>();
+				controllerSet = new GList<Controller>();
+				plugins = new GList<Class<?>>();
+				scanForAmps();
+			}
+
+			catch(IOException e)
+			{
+				e.printStackTrace();
+			}
+
+			catch(SecurityException e)
+			{
+				e.printStackTrace();
+			}
+
+			catch(IllegalArgumentException e)
+			{
+				e.printStackTrace();
+			}
+
+			catch(ClassNotFoundException e)
+			{
+				e.printStackTrace();
+			}
+
 			initializeAmps();
 		}
 
@@ -193,6 +203,7 @@ public class Main extends AmpedPlugin
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void onStop()
 	{
@@ -214,6 +225,31 @@ public class Main extends AmpedPlugin
 		catch(InvocationTargetException e)
 		{
 			e.printStackTrace();
+		}
+
+		for(Thread i : Thread.getAllStackTraces().keySet())
+		{
+			if(i.getName().startsWith("Surge "))
+			{
+				i.interrupt();
+
+				try
+				{
+					System.out.println("Waiting on " + i.getName());
+					i.join(300);
+
+					if(i.isAlive())
+					{
+						i.stop();
+						i.destroy();
+					}
+				}
+
+				catch(Throwable e)
+				{
+
+				}
+			}
 		}
 	}
 
@@ -604,7 +640,15 @@ public class Main extends AmpedPlugin
 
 		for(IController i : controllerSet)
 		{
-			i.tick();
+			try
+			{
+				i.tick();
+			}
+
+			catch(Throwable e)
+			{
+				D.f("Failed to tick " + i.getClass().getSimpleName());
+			}
 		}
 
 		getThreadPool().tickSyncQueue();

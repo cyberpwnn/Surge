@@ -23,6 +23,24 @@ public abstract class AmpedPlugin extends JavaPlugin implements SurgePlugin, IMa
 
 	public AmpedPlugin()
 	{
+
+	}
+
+	public abstract void doScan() throws IOException, ClassNotFoundException;
+
+	public abstract long getNanoSync();
+
+	public abstract int getThreadCount();
+
+	@Override
+	public void onLoad()
+	{
+
+	}
+
+	@Override
+	public void onEnable()
+	{
 		try
 		{
 			doScan();
@@ -47,27 +65,14 @@ public abstract class AmpedPlugin extends JavaPlugin implements SurgePlugin, IMa
 		ctt = new CoreTickThread();
 		onControllerRegistry();
 		onPreInit();
-	}
 
-	public abstract void doScan() throws IOException, ClassNotFoundException;
-
-	public abstract long getNanoSync();
-
-	public abstract int getThreadCount();
-
-	@Override
-	public void onLoad()
-	{
 		onPostInit();
+		System.out.println("wtf pool...");
 		pp.start();
 		A.mgr = pp;
 		S.mgr = pp;
 		ctt.start();
-	}
 
-	@Override
-	public void onEnable()
-	{
 		Surge.createAmp(this).connect();
 
 		for(IController i : getControllers())

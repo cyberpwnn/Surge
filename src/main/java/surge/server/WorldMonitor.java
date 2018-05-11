@@ -53,6 +53,11 @@ public abstract class WorldMonitor extends Thread implements Listener
 				Thread.sleep(50);
 			}
 
+			catch(InterruptedException e)
+			{
+				return;
+			}
+
 			catch(Exception e)
 			{
 
@@ -215,22 +220,30 @@ public abstract class WorldMonitor extends Thread implements Listener
 			{
 				for(Chunk j : i.getLoadedChunks())
 				{
-					if(j.isLoaded())
+					try
 					{
-						try
+						if(j.isLoaded())
 						{
-							totalTiles += j.getTileEntities().length;
-						}
+							try
+							{
+								totalTiles += j.getTileEntities().length;
+							}
 
-						catch(Exception e)
-						{
+							catch(Exception e)
+							{
 
+							}
 						}
+					}
+
+					catch(Throwable e)
+					{
+
 					}
 				}
 			}
 
-			catch(Exception e)
+			catch(Throwable e)
 			{
 
 			}

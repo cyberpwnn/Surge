@@ -118,7 +118,7 @@ public abstract class TPSMonitor extends Thread
 
 			catch(InterruptedException e)
 			{
-
+				return;
 			}
 		}
 	}

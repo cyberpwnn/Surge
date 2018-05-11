@@ -53,12 +53,18 @@ public abstract class MemoryMonitor extends Thread
 			memoryMax = Runtime.getRuntime().maxMemory();
 			memoryFree = Runtime.getRuntime().freeMemory() + (memoryMax - Runtime.getRuntime().totalMemory());
 			memoryUsed = memoryMax - memoryFree;
-
+			if(interrupted())
+			{
+				return;
+			}
 			if(memoryUsedAfterGC == 0)
 			{
 				memoryUsedAfterGC = memoryUsed;
 			}
-
+			if(interrupted())
+			{
+				return;
+			}
 			if(memoryUsed >= lastMemoryUsed)
 			{
 				allocated += memoryUsed - lastMemoryUsed;
@@ -73,7 +79,10 @@ public abstract class MemoryMonitor extends Thread
 			}
 
 			lastMemoryUsed = memoryUsed;
-
+			if(interrupted())
+			{
+				return;
+			}
 			if(M.ms() - sms >= 50)
 			{
 				sms = M.ms();
@@ -92,7 +101,7 @@ public abstract class MemoryMonitor extends Thread
 
 			catch(InterruptedException e)
 			{
-
+				return;
 			}
 		}
 	}

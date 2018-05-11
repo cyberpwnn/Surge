@@ -26,6 +26,7 @@ import org.bukkit.plugin.RegisteredListener;
 import org.cyberpwn.glang.GList;
 
 import surge.Surge;
+import surge.control.AmpedPlugin;
 
 /*
  * #%L
@@ -71,6 +72,20 @@ public class PluginUtil
 	{
 		if(plugin != null && !plugin.isEnabled())
 			Bukkit.getPluginManager().enablePlugin(plugin);
+	}
+
+	public static void enable(String s)
+	{
+		for(Plugin i : Bukkit.getPluginManager().getPlugins())
+		{
+			if(i.getName().equals(s))
+			{
+				enable(i);
+				return;
+			}
+		}
+
+		load(s);
 	}
 
 	/**
@@ -620,6 +635,12 @@ public class PluginUtil
 		System.gc();
 
 		return;
+	}
+
+	public static void reloadSoft(AmpedPlugin p)
+	{
+		Bukkit.getPluginManager().disablePlugin(p);
+		Bukkit.getPluginManager().enablePlugin(p);
 	}
 
 }

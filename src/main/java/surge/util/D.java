@@ -3,6 +3,7 @@ package surge.util;
 import java.io.File;
 
 import org.bukkit.Bukkit;
+import org.cyberpwn.glang.Callback;
 import org.cyberpwn.glang.GList;
 
 import surge.Surge;
@@ -12,6 +13,7 @@ public class D
 	private static GList<String> buffer = new GList<String>();
 	private static boolean dbg = false;
 	private static int kf = 0;
+	public static Callback<String> scall = null;
 
 	public static void flush()
 	{
@@ -71,6 +73,11 @@ public class D
 	public static void v(Object instance, String message)
 	{
 		cdb();
+
+		if(scall != null)
+		{
+			scall.run(message);
+		}
 
 		if(dbg)
 		{

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.cyberpwn</groupId>
 	<artifactId>Surge</artifactId>
-	<version>2.3.6</version>
+	<version>2.4.2</version>
 	<name>Surge</name>
 	<description>A shade-able api for making bukkit plugins quickly</description>
 	<properties>
@@ -56,7 +56,7 @@
 		<dependency>
 			<groupId>org.cyberpwn</groupId>
 			<artifactId>GConcurrent</artifactId>
-			<version>1.5.1</version>
+			<version>1.5.3</version>
 		</dependency>
 	</dependencies>
 	<distributionManagement>
